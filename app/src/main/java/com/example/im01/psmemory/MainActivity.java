@@ -3,13 +3,18 @@ package com.example.im01.psmemory;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTabHost;
+import android.support.v7.app.ActionBarActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
+
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
@@ -20,9 +25,8 @@ import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
 
-public class MainActivity extends AppCompatActivity
+public class MainActivity extends ActionBarActivity
         implements NavigationView.OnNavigationItemSelectedListener {
-
     Firebase myFirebaseRef ;
     Button change;
     TextView name;
@@ -33,11 +37,26 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        FragmentTabHost tabHost= (FragmentTabHost) findViewById(android.R.id.tabhost);
+        tabHost.setup(this, getSupportFragmentManager(), R.id.realtabcontent);
+
+        //1
+        tabHost.addTab(tabHost.newTabSpec("PS")
+                        .setIndicator("PS"),
+                Ps_fragment.class,
+                null);
+        //2
+        tabHost.addTab(tabHost.newTabSpec("Memory")
+                        .setIndicator("Memory"),
+                Memory_frag.class,
+                null);
         //firebase start
         Firebase.setAndroidContext(this);
-        change=(Button)findViewById(R.id.button);
-        name=(TextView)findViewById(R.id.textView2);
+       // change=(Button)findViewById(R.id.button);
+        //name=(TextView)findViewById(R.id.textView2);
         myFirebaseRef = new Firebase("https://sweltering-torch-4496.firebaseio.com/");
+        FragmentManager manager=this.getSupportFragmentManager();
+
 
         //realtime to update firebase
         myFirebaseRef.child("keyname").addValueEventListener(new ValueEventListener() {
@@ -45,7 +64,7 @@ public class MainActivity extends AppCompatActivity
             public void onDataChange(DataSnapshot dataSnapshot) {
 
                 System.out.println(dataSnapshot.getValue());
-                name.setText( String.valueOf(dataSnapshot.getValue()));
+              //  name.setText( String.valueOf(dataSnapshot.getValue()));
 
             }
 
@@ -56,21 +75,7 @@ public class MainActivity extends AppCompatActivity
 
         });
 
-        change.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                myFirebaseRef.child("message").setValue("Do you have data? You'll love Firebase.");
-            }
-        });
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
