@@ -30,15 +30,16 @@ public class MainActivity extends ActionBarActivity
     Firebase myFirebaseRef ;
     Button change;
     TextView name;
-
+    FragmentTabHost tabHost;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        FragmentTabHost tabHost= (FragmentTabHost) findViewById(android.R.id.tabhost);
+        tabHost= (FragmentTabHost) findViewById(android.R.id.tabhost);
         tabHost.setup(this, getSupportFragmentManager(), R.id.realtabcontent);
+
 
         //1
         tabHost.addTab(tabHost.newTabSpec("PS")
@@ -55,7 +56,7 @@ public class MainActivity extends ActionBarActivity
        // change=(Button)findViewById(R.id.button);
         //name=(TextView)findViewById(R.id.textView2);
         myFirebaseRef = new Firebase("https://sweltering-torch-4496.firebaseio.com/");
-        FragmentManager manager=this.getSupportFragmentManager();
+
 
 
         //realtime to update firebase
@@ -104,7 +105,16 @@ public class MainActivity extends ActionBarActivity
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
     }
+    @Override
+    protected void onResume() {
+        int id = getIntent().getIntExtra("id", 0);
 
+        if (id == 1 ) {
+            tabHost.setCurrentTab(1);
+
+        }
+        super.onResume();
+    }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will

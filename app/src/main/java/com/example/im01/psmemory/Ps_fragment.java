@@ -5,6 +5,7 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,16 +21,14 @@ public class Ps_fragment extends Fragment {
     private Spinner time;
     ArrayAdapter<String> methodlist;
     ArrayAdapter<String> timelist;
-    String methodselect[]={"E-mail","簡訊","Facebook","Twitter","其他"};
+    String methodselect[]={"選擇你想訴說的方式","簡訊","Facebook","Twitter","其他"};
     String timeselect[]={"天","小時","分鐘"};
     Button accept;
     Button acceptd;
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-
         MainActivity mainActivity = (MainActivity)activity;
-
     }
 
     @Override
@@ -42,13 +41,22 @@ public class Ps_fragment extends Fragment {
                 android.R.layout.simple_spinner_item,methodselect);
         method.setAdapter(methodlist);
 
+
         method.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-               final Dialog set=new Dialog(getActivity());
-                set.setTitle("想對誰說");
-                set.setContentView(R.layout.dialog_layout);
-                set.show();
+               if(position==0){
+                   System.out.print("nice");
+                   Log.e("S","請選擇");
+               }
+                else{
+                   final Dialog set=new Dialog(getActivity());
+                   set.setTitle("想對誰說");
+                   set.setContentView(R.layout.dialog_layout);
+                   set.show();
+
+               }
+
 
             }
 
@@ -57,6 +65,7 @@ public class Ps_fragment extends Fragment {
 
             }
         });
+
         accept.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
