@@ -4,11 +4,9 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
+
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
+
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,15 +14,25 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CalendarView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+
 
 public class Memory_frag extends Fragment {
     private String value = "";
     private Spinner method;
-    Button fromfriend;
+    Button fromfriend,nowtime;
+
+
+
     ArrayAdapter<String> methodlist;
-    String methodselect[]={"請選擇要紀念的方式","簡訊","Facebook","E-mail","其他"};
+    String methodselect[]={"請選擇要紀念的對象"};
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
@@ -32,7 +40,12 @@ public class Memory_frag extends Fragment {
         MainActivity mainActivity = (MainActivity)activity;
 
     }
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        // TODO Auto-generated method stub
+        super.onCreate(savedInstanceState);
 
+    }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final View root=inflater.inflate(R.layout.activity_memory_frag, container, false);
@@ -40,6 +53,30 @@ public class Memory_frag extends Fragment {
         methodlist = new ArrayAdapter<String>(getActivity(),
                 android.R.layout.simple_spinner_item,methodselect);
         method.setAdapter(methodlist);
+        nowtime=(Button)root.findViewById(R.id.nowtime);
+        nowtime.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Calendar c=Calendar.getInstance();
+
+                c.set(2017,11,10);
+
+              /*  c.setOnDateChangeListener(new CalendarView.OnDateChangeListener(){
+
+                    @Override
+                    public void onSelectedDayChange(CalendarView view,int year,int month,int day){
+
+                    }
+
+                });*/
+
+                SimpleDateFormat df=new SimpleDateFormat("yyyy/MM/dd");
+                String date=df.format(c.getTime());
+
+                Toast.makeText(getActivity(),date,Toast.LENGTH_LONG).show();
+            }
+        });
 
         method.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -73,6 +110,11 @@ public class Memory_frag extends Fragment {
             }
         });
         return  root;
+    }
+
+
+    public void settime(){
+
     }
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {

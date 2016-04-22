@@ -13,7 +13,6 @@
     tools:showIn="@layout/activity_ps_fragment"
     >
 
-
     <Spinner
         android:layout_width="200dp"
         android:layout_height="wrap_content"
@@ -30,24 +29,11 @@
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:inputType="textEmailAddress"
-        android:ems="10"
-        android:id="@+id/editText3"
-        android:layout_below="@+id/spinner"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:hint="想對誰說" />
-
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:id="@+id/editText4"
-        android:layout_below="@+id/editText3"
-        android:layout_alignRight="@+id/editText3"
-        android:layout_alignEnd="@+id/editText3"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:hint="主旨" />
+        android:hint="主旨"
+        android:layout_below="@+id/spinner" />
 
     <EditText
         android:layout_width="wrap_content"
@@ -64,7 +50,7 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Accept"
+        android:text="下一步"
         android:id="@+id/button"
         android:layout_marginLeft="37dp"
         android:layout_marginStart="37dp"
@@ -75,11 +61,24 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Cancel"
+        android:text="我還沒想好"
         android:id="@+id/button2"
         android:layout_alignParentBottom="true"
-        android:layout_toRightOf="@+id/editText4"
-        android:layout_toEndOf="@+id/editText4" />
+        android:layout_alignRight="@+id/editText5"
+        android:layout_alignEnd="@+id/editText5"
+        android:layout_marginRight="49dp"
+        android:layout_marginEnd="49dp" />
+<LinearLayout
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:id="@+id/whoed"
+    android:layout_below="@+id/editText5"
+    android:layout_alignParentLeft="true"
+    android:layout_alignParentStart="true">
+</LinearLayout>
+
+
 
 
 </RelativeLayout>

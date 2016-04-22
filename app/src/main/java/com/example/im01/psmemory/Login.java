@@ -19,7 +19,8 @@ import com.firebase.client.ValueEventListener;
 public class Login extends AppCompatActivity {
     Button login;
     Button account;
-    String accanswer,passworda;
+    String accountM,passM,emailM;
+    Member member=new Member();
     EditText accounte,password;
     Firebase myFirebaseRef ;
     @Override
@@ -34,15 +35,29 @@ public class Login extends AppCompatActivity {
         account=(Button)findViewById(R.id.button4);
         accounte=(EditText)findViewById(R.id.editText2);
         password=(EditText)findViewById(R.id.editText);
-        myFirebaseRef = new Firebase("https://sweltering-torch-4496.firebaseio.com/");
+        myFirebaseRef = new Firebase("https://sweltering-torch-4496.firebaseio.com/").child("account");
 
         //firebase
-        myFirebaseRef.child("keyname").addValueEventListener(new ValueEventListener() {
+        myFirebaseRef.child("member1").child("email").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                accanswer=String.valueOf(dataSnapshot.getValue());
-                System.out.println(dataSnapshot.getValue());
+               emailM=String.valueOf(dataSnapshot.getValue());
+                //  name.setText( String.valueOf(dataSnapshot.getValue()));
 
+            }
+
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+
+            }
+
+        });
+        myFirebaseRef.child("member1").child("keyname").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                accountM=String.valueOf(dataSnapshot.getValue());
+                System.out.println(dataSnapshot.getValue());
+                System.out.println(member.accanswer);
 
                 //  name.setText( String.valueOf(dataSnapshot.getValue()));
 
@@ -54,13 +69,12 @@ public class Login extends AppCompatActivity {
             }
 
         });
-        myFirebaseRef.child("keypassword").addValueEventListener(new ValueEventListener() {
+        myFirebaseRef.child("member1").child("keypassword").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                passworda=String.valueOf(dataSnapshot.getValue());
+                passM=String.valueOf(dataSnapshot.getValue());
                 System.out.println(dataSnapshot.getValue());
-
-
+                System.out.println( member.passworda);
 
                 //  name.setText( String.valueOf(dataSnapshot.getValue()));
 
@@ -83,14 +97,22 @@ public class Login extends AppCompatActivity {
         login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(accounte.getText().toString().equals(accanswer)&& password.getText().toString().equals(passworda)){
+                if(accounte.getText().toString().equals(accountM)&& password.getText().toString().equals(passM)){
                     Intent log=new Intent();
                     log.setClass(Login.this,MainSelect.class);
                     startActivity(log);
-                }else{
+                    member.email=emailM;
+                    member.accanswer=accountM;
+                    member.passworda=passM;
+                }
+                else if(accounte.getText().toString()==null){
+                    Toast.makeText(Login.this,"帳號尚未輸入喔",Toast.LENGTH_LONG).show();
+                }
+                else if(password.getText().toString()==null){
+                    Toast.makeText(Login.this,"密碼尚未輸入喔",Toast.LENGTH_LONG).show();
+                }
+                else{
                     Toast.makeText(Login.this,"帳號或密碼有誤"+accounte.getText().toString()+password.getText().toString(),Toast.LENGTH_LONG).show();
-
-
                 }
 
 

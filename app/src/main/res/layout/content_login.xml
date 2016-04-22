@@ -52,7 +52,8 @@
         android:layout_below="@+id/textView6"
         android:layout_toRightOf="@+id/textView6"
         android:layout_toEndOf="@+id/textView6"
-        android:hint="請輸入密碼" />
+        android:hint="請輸入密碼"
+        android:text="123" />
 
     <EditText
         android:layout_width="wrap_content"
@@ -63,7 +64,8 @@
         android:layout_alignTop="@+id/textView6"
         android:layout_toRightOf="@+id/textView6"
         android:layout_toEndOf="@+id/textView6"
-        android:hint="請輸入帳號" />
+        android:hint="請輸入帳號"
+        android:text="Tyson" />
 
     <Button
         android:layout_width="wrap_content"

@@ -1,6 +1,8 @@
 package com.example.im01.psmemory;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentActivity;
@@ -28,9 +30,10 @@ import com.firebase.client.ValueEventListener;
 public class MainActivity extends ActionBarActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     Firebase myFirebaseRef ;
-    Button change;
-    TextView name;
+
+    TextView membername,memberemail;
     FragmentTabHost tabHost;
+    Member member=new Member();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,8 +42,7 @@ public class MainActivity extends ActionBarActivity
         setSupportActionBar(toolbar);
         tabHost= (FragmentTabHost) findViewById(android.R.id.tabhost);
         tabHost.setup(this, getSupportFragmentManager(), R.id.realtabcontent);
-
-
+        
         //1
         tabHost.addTab(tabHost.newTabSpec("PS")
                         .setIndicator("PS"),
@@ -57,27 +59,6 @@ public class MainActivity extends ActionBarActivity
         //name=(TextView)findViewById(R.id.textView2);
         myFirebaseRef = new Firebase("https://sweltering-torch-4496.firebaseio.com/");
 
-
-
-        //realtime to update firebase
-        myFirebaseRef.child("keyname").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-
-                System.out.println(dataSnapshot.getValue());
-              //  name.setText( String.valueOf(dataSnapshot.getValue()));
-
-            }
-
-            @Override
-            public void onCancelled(FirebaseError firebaseError) {
-
-            }
-
-        });
-
-
-
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -86,7 +67,13 @@ public class MainActivity extends ActionBarActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-
+        if(navigationView.getHeaderCount() > 0) {
+            View header = navigationView.getHeaderView(0);
+            membername=(TextView)header.findViewById(R.id.membername);
+            memberemail=(TextView) header.findViewById(R.id.memberemail);
+            membername.setText(member.accanswer);
+            memberemail.setText(member.email);
+        }
     }
 
     @Override
@@ -139,6 +126,10 @@ public class MainActivity extends ActionBarActivity
         if (id == R.id.nav_camera) {
             // Handle the camera action
         } else if (id == R.id.nav_gallery) {
+            Intent intent = new Intent(
+                    android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+
+            startActivity(intent);
 
         } else if (id == R.id.nav_slideshow) {
 

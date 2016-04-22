@@ -3,40 +3,47 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:weightSum="1"
-    android:background="#fffff13e">
-
-    <Spinner
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/spinner2" />
+    android:background="#c4be75">
+<LinearLayout
+    android:orientation="horizontal"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    >
 
     <EditText
-        android:layout_width="250dp"
+        android:layout_width="237dp"
         android:layout_height="wrap_content"
         android:inputType="number"
         android:ems="10"
         android:id="@+id/editText6"
-        android:layout_alignParentTop="true"
-        android:layout_alignLeft="@+id/spinner2"
-        android:layout_alignStart="@+id/spinner2"
-        android:layout_marginTop="37dp"
-        android:text="請輸入時間" />
+        android:hint="請輸入時間"
+        android:layout_centerVertical="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <Spinner
+        android:layout_width="77dp"
+        android:layout_height="46dp"
+        android:id="@+id/spinner2"
+        android:layout_centerVertical="true"
+        android:layout_toRightOf="@+id/editText6"
+        android:layout_toEndOf="@+id/editText6" />
+</LinearLayout>
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="accept"
+        android:text="時間確定"
         android:id="@+id/accept"
         android:layout_alignTop="@+id/button9" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="cancel"
+        android:text="我還沒想好"
         android:id="@+id/button9"
-        android:layout_below="@+id/editText6"
-        android:layout_alignRight="@+id/spinner2"
-        android:layout_alignEnd="@+id/spinner2"
-        android:layout_marginRight="71dp"
-        android:layout_marginEnd="71dp" />
+        android:layout_marginTop="82dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
 </RelativeLayout>
