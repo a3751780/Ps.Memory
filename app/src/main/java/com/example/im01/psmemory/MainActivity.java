@@ -124,7 +124,9 @@ public class MainActivity extends ActionBarActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_camera) {
-            // Handle the camera action
+            Intent i=new Intent();
+            i.setClass(MainActivity.this,Pslist.class);
+            startActivity(i);
         } else if (id == R.id.nav_gallery) {
             Intent intent = new Intent(
                     android.provider.MediaStore.ACTION_IMAGE_CAPTURE);

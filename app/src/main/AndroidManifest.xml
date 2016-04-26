@@ -3,6 +3,7 @@
     package="com.example.im01.psmemory">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
         android:allowBackup="true"
@@ -49,6 +50,10 @@
         <activity
             android:name=".Friend"
             android:label="@string/title_activity_friend"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".Pslist"
+            android:label="@string/title_activity_pslist"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 

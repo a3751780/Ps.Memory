@@ -16,20 +16,18 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CalendarView;
 import android.widget.Spinner;
-import android.widget.TextView;
+
 import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
+
 
 
 public class Memory_frag extends Fragment {
     private String value = "";
     private Spinner method;
     Button fromfriend,nowtime;
-
-
 
     ArrayAdapter<String> methodlist;
     String methodselect[]={"請選擇要紀念的對象"};

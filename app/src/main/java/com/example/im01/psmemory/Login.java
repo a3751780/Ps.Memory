@@ -23,6 +23,7 @@ public class Login extends AppCompatActivity {
     Member member=new Member();
     EditText accounte,password;
     Firebase myFirebaseRef ;
+    int count=0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,6 +39,22 @@ public class Login extends AppCompatActivity {
         myFirebaseRef = new Firebase("https://sweltering-torch-4496.firebaseio.com/").child("account");
 
         //firebase
+        myFirebaseRef.child("member1").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                count++;
+                //  name.setText( String.valueOf(dataSnapshot.getValue()));
+
+
+            }
+
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+
+            }
+
+        });
+
         myFirebaseRef.child("member1").child("email").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -52,6 +69,7 @@ public class Login extends AppCompatActivity {
             }
 
         });
+
         myFirebaseRef.child("member1").child("keyname").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {

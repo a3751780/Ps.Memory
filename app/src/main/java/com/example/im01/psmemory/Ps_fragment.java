@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
 import android.content.pm.PackageInstaller;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -25,6 +26,8 @@ import java.net.Authenticator;
 import java.net.PasswordAuthentication;
 import java.util.Properties;
 
+import javax.mail.Session;
+
 public class Ps_fragment extends Fragment {
     EditText wanttosay,title;
     private Spinner method;
@@ -34,13 +37,15 @@ public class Ps_fragment extends Fragment {
     Firebase mfirebase;
     ArrayAdapter<String> methodlist;
     ArrayAdapter<String> timelist;
-    String methodselect[]={"選擇你想訴說的方式","簡訊","Facebook","Twitter","其他"};
+    String methodselect[]={"選擇你想訴說的方式","簡訊","E-mail","Twitter","其他"};
     String timeselect[]={"天","小時","分鐘"};
     String contactmethod;
     Button accept,selfin,friend;
     Button acceptd;
     LinearLayout wholayout;
-
+    EditText selfinwho;
+    String titleF,message,emailF;
+    GMailSender sender=new GMailSender("s3751780@gmail.com ","happy0204");
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
@@ -59,6 +64,9 @@ public class Ps_fragment extends Fragment {
         methodlist = new ArrayAdapter<String>(getActivity(),
                 android.R.layout.simple_spinner_item,methodselect);
         method.setAdapter(methodlist);
+
+
+
 
         method.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -81,7 +89,7 @@ public class Ps_fragment extends Fragment {
                        public void onClick(View v) {
 
                            wholayout.removeAllViews();
-                           EditText selfinwho=new EditText(getActivity());
+                           selfinwho=new EditText(getActivity());
                            selfinwho.setHint("告訴我她的E-mail");
                            wholayout.addView(selfinwho);
                            set.dismiss();
@@ -132,9 +140,44 @@ public class Ps_fragment extends Fragment {
                         count++;
                         mfirebase.child("Ps"+count).child("message").setValue(wanttosay.getText().toString());
                         mfirebase.child("Ps"+count).child("title").setValue(title.getText().toString());
-                        mfirebase.child("Ps"+count).child("e-mail").setValue(contactmethod);
-                        acc.dismiss();
+                        mfirebase.child("Ps"+count).child("e-mail").setValue(selfinwho.getText().toString());
+                        Log.e("主旨",title.getText().toString());
+                        Log.e("訊息",wanttosay.getText().toString());
+                        Log.e("收件人",selfinwho.getText().toString());
+                        titleF=title.getText().toString();
+                        message=wanttosay.getText().toString();
+                        emailF=selfinwho.getText().toString();
 
+                        new AsyncTask<Void, Void, Void>() {
+
+                            @Override
+                            protected void onPreExecute()
+                            {
+
+                            }
+
+                            @Override
+                            protected Void doInBackground(Void... params)
+                            {
+
+                                try{
+                                    sender.sendMail(titleF,message,"s3751780@gmail.com", emailF);
+                                }catch(Exception e){
+
+                                    e.printStackTrace();
+
+                                }
+                                return null;
+                            }
+
+                            @Override
+                            protected void onPostExecute(Void res)
+                            {
+
+                            }
+                        }.execute();
+
+                        acc.dismiss();
                     }
                 });
             }
@@ -143,21 +186,7 @@ public class Ps_fragment extends Fragment {
 
         return root;
     }
-    public void sendmail(){
-        String host = "smtp.gmail.com";
-        int port = 587;
-        final String username = "user@gmail.com";
-        final String password = "your password";//your password
 
-        Properties props = new Properties();
-        props.put("mail.smtp.host", host);
-        props.put("mail.smtp.auth", "true");
-        props.put("mail.smtp.starttls.enable", "true");
-        props.put("mail.smtp.port", port);
-
-
-
-    }
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
