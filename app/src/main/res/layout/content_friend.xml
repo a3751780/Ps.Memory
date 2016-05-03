@@ -25,24 +25,26 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/listView"
-        android:layout_below="@+id/textView2"
-        android:layout_centerHorizontal="true"
-        android:choiceMode="singleChoice" />
+        android:choiceMode="singleChoice"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_above="@+id/button11"
+        android:layout_below="@+id/textView2" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Accept"
+        android:text="確定"
         android:id="@+id/button11"
-        android:layout_marginBottom="55dp"
         android:layout_alignParentBottom="true"
         android:layout_toLeftOf="@+id/textView2"
-        android:layout_toStartOf="@+id/textView2" />
+        android:layout_toStartOf="@+id/textView2"
+        android:layout_marginBottom="61dp" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Cancel"
+        android:text="取消"
         android:id="@+id/button12"
         android:layout_alignTop="@+id/button11"
         android:layout_toRightOf="@+id/textView2"

@@ -1,12 +1,9 @@
 package com.example.im01.psmemory;
 
+
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.provider.MediaStore;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTabHost;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
@@ -15,12 +12,13 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
+
 
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
@@ -33,6 +31,8 @@ public class MainActivity extends ActionBarActivity
 
     TextView membername,memberemail;
     FragmentTabHost tabHost;
+
+    Context thiss;
     Member member=new Member();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,7 +42,8 @@ public class MainActivity extends ActionBarActivity
         setSupportActionBar(toolbar);
         tabHost= (FragmentTabHost) findViewById(android.R.id.tabhost);
         tabHost.setup(this, getSupportFragmentManager(), R.id.realtabcontent);
-        
+        // Here, thisActivity is the current activity
+
         //1
         tabHost.addTab(tabHost.newTabSpec("PS")
                         .setIndicator("PS"),
@@ -76,6 +77,7 @@ public class MainActivity extends ActionBarActivity
         }
     }
 
+
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -102,6 +104,10 @@ public class MainActivity extends ActionBarActivity
         }
         super.onResume();
     }
+
+
+
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
@@ -123,23 +129,25 @@ public class MainActivity extends ActionBarActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
+        if (id == R.id.ps) {
             Intent i=new Intent();
             i.setClass(MainActivity.this,Pslist.class);
             startActivity(i);
-        } else if (id == R.id.nav_gallery) {
-            Intent intent = new Intent(
-                    android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+        } else if (id == R.id.member) {
 
-            startActivity(intent);
+        } else if (id == R.id.friendlist) {
+            Intent i=new Intent();
+            i.setClass(MainActivity.this,Friend.class);
+            startActivity(i);
+        } else if (id == R.id.logout) {
 
-        } else if (id == R.id.nav_slideshow) {
+            Intent i=new Intent();
+            i.setClass(MainActivity.this,Login.class);
+            startActivity(i);
 
-        } else if (id == R.id.nav_manage) {
+        } else if (id == R.id.introduction) {
 
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
+        } else if (id == R.id.feedback) {
 
         }
 

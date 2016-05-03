@@ -3,19 +3,19 @@
 
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/nav_camera"
+            android:id="@+id/ps"
             android:icon="@drawable/ic_menu_camera"
             android:title="查看PS" />
         <item
-            android:id="@+id/nav_gallery"
+            android:id="@+id/member"
             android:icon="@drawable/ic_menu_gallery"
             android:title="會員資料" />
         <item
-            android:id="@+id/nav_slideshow"
+            android:id="@+id/friendlist"
             android:icon="@drawable/ic_menu_slideshow"
             android:title="好友名單" />
         <item
-            android:id="@+id/nav_manage"
+            android:id="@+id/logout"
             android:icon="@drawable/ic_menu_manage"
             android:title="登出" />
     </group>
@@ -23,11 +23,11 @@
     <item android:title="Extra">
         <menu>
             <item
-                android:id="@+id/nav_share"
+                android:id="@+id/introduction"
                 android:icon="@drawable/ic_menu_share"
                 android:title="說明" />
             <item
-                android:id="@+id/nav_send"
+                android:id="@+id/feedback"
                 android:icon="@drawable/ic_menu_send"
                 android:title="Feedback" />
         </menu>

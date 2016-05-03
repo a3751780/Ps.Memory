@@ -1,4 +1,4 @@
-package com.example.im01.psmemory;
+package com.example.im01.psmemory.Gmail;
 
 import java.security.AccessController;
 import java.security.Provider;

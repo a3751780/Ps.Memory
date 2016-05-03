@@ -4,6 +4,10 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.SEND_SMS" />
+    <uses-permission android:name="android.permission.RECEIVE_SMS" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
@@ -24,6 +28,26 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".Dropbox.DBRoulette"
+            android:configChanges="orientation|keyboard"
+            android:label="DB"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name="com.dropbox.client2.android.AuthActivity"
+            android:configChanges="orientation|keyboard"
+            android:launchMode="singleTask"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar">
+            <intent-filter>
+
+                <!-- Change this to be db- followed by your app key -->
+                <data android:scheme="db-e8fqg1fie8sirlr" />
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
+        <activity
             android:name=".Login"
             android:label="@string/title_activity_login"
             android:theme="@style/AppTheme.NoActionBar" />
@@ -40,21 +64,13 @@
             android:label="@string/title_activity_main_select"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".Ps_fragment"
-            android:label="@string/title_activity_ps_fragment"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".Memory_frag"
-            android:label="@string/title_activity_memory_frag"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
             android:name=".Friend"
             android:label="@string/title_activity_friend"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".Pslist"
             android:label="@string/title_activity_pslist"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
     </application>
 
 </manifest>

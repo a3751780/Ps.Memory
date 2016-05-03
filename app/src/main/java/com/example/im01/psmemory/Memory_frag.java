@@ -2,11 +2,10 @@ package com.example.im01.psmemory;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-
 import android.support.v4.app.Fragment;
-
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,11 +13,13 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.CalendarView;
 import android.widget.Spinner;
 
 import android.widget.Toast;
 
+import com.example.im01.psmemory.Dropbox.DBRoulette;
+
+import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
@@ -27,10 +28,14 @@ import java.util.Calendar;
 public class Memory_frag extends Fragment {
     private String value = "";
     private Spinner method;
-    Button fromfriend,nowtime;
-
+    Button fromfriend,nowtime,next;
+    private DBRoulette myDropboxTool;
     ArrayAdapter<String> methodlist;
+    private String Dir="/Photos/";
     String methodselect[]={"請選擇要紀念的對象"};
+    Context context;
+    File file;
+
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
@@ -47,27 +52,28 @@ public class Memory_frag extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final View root=inflater.inflate(R.layout.activity_memory_frag, container, false);
+
+        myDropboxTool  = new DBRoulette(getActivity());
         method=(Spinner)root.findViewById(R.id.spinner);
         methodlist = new ArrayAdapter<String>(getActivity(),
                 android.R.layout.simple_spinner_item,methodselect);
         method.setAdapter(methodlist);
         nowtime=(Button)root.findViewById(R.id.nowtime);
+        next=(Button)root.findViewById(R.id.button);
+        next.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent picker = new Intent(Intent.ACTION_GET_CONTENT);
+                picker.setType("*/*");
+                startActivity(picker);
+            }
+        });
+
         nowtime.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
                 Calendar c=Calendar.getInstance();
-
-                c.set(2017,11,10);
-
-              /*  c.setOnDateChangeListener(new CalendarView.OnDateChangeListener(){
-
-                    @Override
-                    public void onSelectedDayChange(CalendarView view,int year,int month,int day){
-
-                    }
-
-                });*/
 
                 SimpleDateFormat df=new SimpleDateFormat("yyyy/MM/dd");
                 String date=df.format(c.getTime());

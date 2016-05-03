@@ -1,8 +1,7 @@
-package com.example.im01.psmemory;
+package com.example.im01.psmemory.Gmail;
 
 import javax.activation.DataHandler;
 import javax.activation.DataSource;
-import javax.activation.FileDataSource;
 import javax.mail.Message;
 import javax.mail.Multipart;
 import javax.mail.PasswordAuthentication;
@@ -13,8 +12,6 @@ import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 
-
-import android.util.Log;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;

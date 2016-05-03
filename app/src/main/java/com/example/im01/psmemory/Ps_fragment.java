@@ -1,12 +1,17 @@
 package com.example.im01.psmemory;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.Dialog;
+import android.app.PendingIntent;
 import android.content.Intent;
-import android.content.pm.PackageInstaller;
+import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
+import android.telephony.SmsManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,34 +23,34 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
-import android.widget.TextView;
 
+import com.example.im01.psmemory.Gmail.GMailSender;
 import com.firebase.client.Firebase;
 
-import java.net.Authenticator;
-import java.net.PasswordAuthentication;
-import java.util.Properties;
-
-import javax.mail.Session;
-
 public class Ps_fragment extends Fragment {
+    private final static String MSG_RECEIVED = "android.provider.Telephony.SMS_RECEIVED";
     EditText wanttosay,title;
     private Spinner method;
     int count=1;
     private Spinner time;
     private String who;
+    int selectmail=0,selects=0;
     Firebase mfirebase;
     ArrayAdapter<String> methodlist;
     ArrayAdapter<String> timelist;
     String methodselect[]={"選擇你想訴說的方式","簡訊","E-mail","Twitter","其他"};
     String timeselect[]={"天","小時","分鐘"};
+    private static final int PERMISSION_SEND_SMS = 123;
     String contactmethod;
     Button accept,selfin,friend;
     Button acceptd;
     LinearLayout wholayout;
     EditText selfinwho;
     String titleF,message,emailF;
+    String phone;
     GMailSender sender=new GMailSender("s3751780@gmail.com ","happy0204");
+
+
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
@@ -65,9 +70,6 @@ public class Ps_fragment extends Fragment {
                 android.R.layout.simple_spinner_item,methodselect);
         method.setAdapter(methodlist);
 
-
-
-
         method.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -76,12 +78,48 @@ public class Ps_fragment extends Fragment {
                if(position==0){
                    System.out.print("nice");
                    Log.e("S","請選擇");
-               }
+               }else if(position==1){
+                   final Dialog set=new Dialog(getActivity());
+
+                   set.setContentView(R.layout.dialog_layout);
+                   set.setTitle("想對誰說");
+                   set.show();
+                   selfin=(Button)set.findViewById(R.id.button7);
+                   friend=(Button)set.findViewById(R.id.buttonf);
+                   selectmail=0;
+                   selects=1;
+                   selfin.setOnClickListener(new View.OnClickListener() {
+                       @Override
+                       public void onClick(View v) {
+
+                           wholayout.removeAllViews();
+                           selfinwho=new EditText(getActivity());
+                           selfinwho.setHint("告訴我他的電話");
+                           wholayout.addView(selfinwho);
+                           set.dismiss();
+                       }
+                   });
+                   friend.setOnClickListener(new View.OnClickListener() {
+                       @Override
+                       public void onClick(View v) {
+                           // wholayout.removeAllViews();
+                           EditText friendinwho=new EditText(getActivity());
+
+                           wholayout.addView(friendinwho);
+                           Intent i=new Intent();
+                           i.setClass(getActivity(),Friend.class);
+                           startActivity(i);
+                       }
+                   });
+                }
                 else{
                    final Dialog set=new Dialog(getActivity());
-                   set.setTitle("想對誰說");
+
                    set.setContentView(R.layout.dialog_layout);
+                   set.setTitle("想對誰說");
                    set.show();
+                   selects=0;
+                   selectmail=1;
                    selfin=(Button)set.findViewById(R.id.button7);
                    friend=(Button)set.findViewById(R.id.buttonf);
                    selfin.setOnClickListener(new View.OnClickListener() {
@@ -90,7 +128,7 @@ public class Ps_fragment extends Fragment {
 
                            wholayout.removeAllViews();
                            selfinwho=new EditText(getActivity());
-                           selfinwho.setHint("告訴我她的E-mail");
+                           selfinwho.setHint("告訴我他的E-mail");
                            wholayout.addView(selfinwho);
                            set.dismiss();
                        }
@@ -125,11 +163,13 @@ public class Ps_fragment extends Fragment {
                 contactmethod=selfin.getText().toString();
                 contactmethod=friend.getText().toString();
                 final Dialog acc=new Dialog(getActivity());
-                acc.setTitle("想多久問候他");
+
                 acc.setContentView(R.layout.dialog_accept);
+                acc.setTitle("想多久問候他");
                 acc.show();
                 time=(Spinner)acc.findViewById(R.id.spinner2);
                 acceptd=(Button)acc.findViewById(R.id.accept);
+                ActivityCompat.requestPermissions(getActivity(),new String[]{Manifest.permission.SEND_SMS},1);
                 timelist = new ArrayAdapter<String>(getActivity(),
                         android.R.layout.simple_spinner_item,timeselect);
                 time.setAdapter(timelist);
@@ -138,46 +178,52 @@ public class Ps_fragment extends Fragment {
                     @Override
                     public void onClick(View v) {
                         count++;
-                        mfirebase.child("Ps"+count).child("message").setValue(wanttosay.getText().toString());
-                        mfirebase.child("Ps"+count).child("title").setValue(title.getText().toString());
-                        mfirebase.child("Ps"+count).child("e-mail").setValue(selfinwho.getText().toString());
-                        Log.e("主旨",title.getText().toString());
-                        Log.e("訊息",wanttosay.getText().toString());
-                        Log.e("收件人",selfinwho.getText().toString());
-                        titleF=title.getText().toString();
-                        message=wanttosay.getText().toString();
-                        emailF=selfinwho.getText().toString();
+                        if(selectmail==1){
+                            mfirebase.child("Ps"+count).child("message").setValue(wanttosay.getText().toString());
+                            mfirebase.child("Ps"+count).child("title").setValue(title.getText().toString());
+                            mfirebase.child("Ps"+count).child("e-mail").setValue(selfinwho.getText().toString());
+                            Log.e("主旨",title.getText().toString());
+                            Log.e("訊息",wanttosay.getText().toString());
+                            Log.e("收件人",selfinwho.getText().toString());
+                            titleF=title.getText().toString();
+                            message=wanttosay.getText().toString();
+                            emailF=selfinwho.getText().toString();
+                            requestSmsPermission();
+                            new AsyncTask<Void, Void, Void>() {
 
-                        new AsyncTask<Void, Void, Void>() {
-
-                            @Override
-                            protected void onPreExecute()
-                            {
-
-                            }
-
-                            @Override
-                            protected Void doInBackground(Void... params)
-                            {
-
-                                try{
-                                    sender.sendMail(titleF,message,"s3751780@gmail.com", emailF);
-                                }catch(Exception e){
-
-                                    e.printStackTrace();
+                                @Override
+                                protected void onPreExecute()
+                                {
 
                                 }
-                                return null;
-                            }
 
-                            @Override
-                            protected void onPostExecute(Void res)
-                            {
+                                @Override
+                                protected Void doInBackground(Void... params)
+                                {
 
-                            }
-                        }.execute();
+                                    try{
+                                        sender.sendMail(titleF,message,"s3751780@gmail.com", emailF);
+                                    }catch(Exception e){
 
-                        acc.dismiss();
+                                        e.printStackTrace();
+
+                                    }
+                                    return null;
+                                }
+
+                                @Override
+                                protected void onPostExecute(Void res)
+                                {
+
+                                }
+                            }.execute();
+                            selectmail=0;
+                            acc.dismiss();
+                        }
+                       else if(selects==1){
+
+                            send();
+                        }
                     }
                 });
             }
@@ -186,7 +232,57 @@ public class Ps_fragment extends Fragment {
 
         return root;
     }
+    private void requestSmsPermission() {
 
+        // check permission is given
+        if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED) {
+            // request permission (see result in onRequestPermissionsResult() method)
+            ActivityCompat.requestPermissions(getActivity(),
+                    new String[]{Manifest.permission.SEND_SMS},
+                    PERMISSION_SEND_SMS);
+        } else {
+            // permission already granted run sms send
+            send();
+        }
+    }
+    @Override
+    public void onRequestPermissionsResult (int requestCode,String permissions[],int[] grantResults){
+        switch (requestCode) {
+            case 1: {
+                // 如果權限請求被取消了，grantResults array 的 length 會是 0
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    // 權限請求通過的處理
+                  send();
+                } else {
+                    // 權限請求駁回的處理(如告知使用者那些功能無法使用之類的)
+                }
+                return;
+            }
+
+        }
+    }
+
+    private void send(){
+        mfirebase.child("Ps"+count).child("message").setValue(wanttosay.getText().toString());
+        mfirebase.child("Ps"+count).child("title").setValue(title.getText().toString());
+        mfirebase.child("Ps"+count).child("phonenumber").setValue(selfinwho.getText().toString());
+        Log.e("主旨",title.getText().toString());
+        Log.e("訊息",wanttosay.getText().toString());
+        Log.e("收件人",selfinwho.getText().toString());
+        titleF=title.getText().toString();
+        message=wanttosay.getText().toString();
+        phone=selfinwho.getText().toString();
+
+        SmsManager smsManager = SmsManager.getDefault();
+        try{
+            smsManager.sendTextMessage(phone,
+                    null,
+                   message, PendingIntent.getBroadcast(getActivity().getApplicationContext(), 0, new Intent(), 0), null);
+        }
+        catch(Exception e){
+            e.printStackTrace();
+        }
+    }
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
