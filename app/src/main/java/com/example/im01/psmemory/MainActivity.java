@@ -1,12 +1,15 @@
 package com.example.im01.psmemory;
 
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTabHost;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -20,19 +23,25 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.dropbox.client2.DropboxAPI;
+import com.dropbox.client2.android.AndroidAuthSession;
+import com.dropbox.client2.session.AppKeyPair;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
 
+import java.io.File;
+import java.io.FileInputStream;
+
 public class MainActivity extends ActionBarActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+
     Firebase myFirebaseRef ;
 
     TextView membername,memberemail;
     FragmentTabHost tabHost;
-
-    Context thiss;
+    Activity Main;
     Member member=new Member();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,11 +49,12 @@ public class MainActivity extends ActionBarActivity
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+
         tabHost= (FragmentTabHost) findViewById(android.R.id.tabhost);
         tabHost.setup(this, getSupportFragmentManager(), R.id.realtabcontent);
         // Here, thisActivity is the current activity
-
-        //1
+        Main=this;        //1
         tabHost.addTab(tabHost.newTabSpec("PS")
                         .setIndicator("PS"),
                 Ps_fragment.class,
@@ -134,7 +144,9 @@ public class MainActivity extends ActionBarActivity
             i.setClass(MainActivity.this,Pslist.class);
             startActivity(i);
         } else if (id == R.id.member) {
-
+            Intent i=new Intent();
+            i.setClass(MainActivity.this,MenberIn.class);
+            startActivity(i);
         } else if (id == R.id.friendlist) {
             Intent i=new Intent();
             i.setClass(MainActivity.this,Friend.class);
@@ -144,7 +156,7 @@ public class MainActivity extends ActionBarActivity
             Intent i=new Intent();
             i.setClass(MainActivity.this,Login.class);
             startActivity(i);
-
+            Main.finish();
         } else if (id == R.id.introduction) {
 
         } else if (id == R.id.feedback) {

@@ -1,28 +1,15 @@
 package com.example.im01.psmemory.Dropbox;
 
 import java.io.File;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
-
 import android.app.Activity;
-import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.content.pm.PackageManager;
 import android.net.Uri;
-import android.os.Bundle;
-import android.os.Environment;
-import android.provider.MediaStore;
 import android.util.Log;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.dropbox.client2.DropboxAPI;
@@ -32,11 +19,10 @@ import com.dropbox.client2.session.AccessTokenPair;
 import com.dropbox.client2.session.AppKeyPair;
 import com.dropbox.client2.session.Session;
 import com.dropbox.client2.session.TokenPair;
-import com.example.im01.psmemory.R;
-
 
 public class DBRoulette extends Activity {
     private static final String TAG = "DBRoulette";
+
 
     ///////////////////////////////////////////////////////////////////////////
     //                      Your app-specific settings.                      //
@@ -46,8 +32,10 @@ public class DBRoulette extends Activity {
     // Note that this is a really insecure way to do this, and you shouldn't
     // ship code which contains your key & secret in such an obvious way.
     // Obfuscation is good.
-    private static final String APP_KEY = "e8fqg1fie8sirlr";
-    private static final String APP_SECRET = "kykx9hct8mj3vt7";
+
+    final static private String APP_KEY = "e8fqg1fie8sirlr";
+    final static private String APP_SECRET = "kykx9hct8mj3vt7";
+
 
     // If you'd like to change the access type to the full Dropbox instead of
     // an app folder, change this value.
@@ -63,17 +51,11 @@ public class DBRoulette extends Activity {
     final static private String ACCESS_SECRET_NAME = "ACCESS_SECRET";
 
 
-    DropboxAPI<AndroidAuthSession> mApi;
+    public DropboxAPI<AndroidAuthSession> mApi;
 
     private boolean mLoggedIn;
 
-
-
     private ImageView mImage;
-
-
-
-
 
     private Context context;
 

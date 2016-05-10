@@ -11,7 +11,8 @@ import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
-import android.telephony.SmsManager;
+
+import android.telephony.gsm.SmsManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,12 +24,22 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.example.im01.psmemory.Gmail.GMailSender;
 import com.firebase.client.Firebase;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.TimeZone;
+
 public class Ps_fragment extends Fragment {
     private final static String MSG_RECEIVED = "android.provider.Telephony.SMS_RECEIVED";
+    Calendar cal = Calendar.getInstance();
+    String dat;
+    SimpleDateFormat sf = new SimpleDateFormat("yyyy/MM/dd");
+    SimpleDateFormat nowtime = new SimpleDateFormat("HH:mm:ss");
+    String date = " ";
     EditText wanttosay,title;
     private Spinner method;
     int count=1;
@@ -48,6 +59,8 @@ public class Ps_fragment extends Fragment {
     EditText selfinwho;
     String titleF,message,emailF;
     String phone;
+    String[] Date;
+    int nowyear,nowmonth,nowday;
     GMailSender sender=new GMailSender("s3751780@gmail.com ","happy0204");
 
 
@@ -70,6 +83,18 @@ public class Ps_fragment extends Fragment {
                 android.R.layout.simple_spinner_item,methodselect);
         method.setAdapter(methodlist);
 
+        dat=String.valueOf(sf.format(cal.getTime()));
+
+        sf.setTimeZone(TimeZone.getTimeZone("GMT+8"));
+        date = String.valueOf(sf.format(new java.util.Date()));
+        Date = date.split("/");
+        nowyear=Integer.valueOf(Date[0]);
+        nowmonth=Integer.valueOf(Date[1]);
+        nowday=Integer.valueOf(Date[2]);
+        Log.e("Year",Date[0]);
+        Log.e("Month",Date[1]);
+        Log.e("Day",Date[2]);
+              ///  Toast.makeText(getActivity(),date,Toast.LENGTH_LONG).show();
         method.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -95,6 +120,8 @@ public class Ps_fragment extends Fragment {
                            wholayout.removeAllViews();
                            selfinwho=new EditText(getActivity());
                            selfinwho.setHint("告訴我他的電話");
+                           selectmail=0;
+                           selects=1;
                            wholayout.addView(selfinwho);
                            set.dismiss();
                        }
@@ -129,6 +156,7 @@ public class Ps_fragment extends Fragment {
                            wholayout.removeAllViews();
                            selfinwho=new EditText(getActivity());
                            selfinwho.setHint("告訴我他的E-mail");
+                           selectmail=1;
                            wholayout.addView(selfinwho);
                            set.dismiss();
                        }
@@ -169,7 +197,7 @@ public class Ps_fragment extends Fragment {
                 acc.show();
                 time=(Spinner)acc.findViewById(R.id.spinner2);
                 acceptd=(Button)acc.findViewById(R.id.accept);
-                ActivityCompat.requestPermissions(getActivity(),new String[]{Manifest.permission.SEND_SMS},1);
+
                 timelist = new ArrayAdapter<String>(getActivity(),
                         android.R.layout.simple_spinner_item,timeselect);
                 time.setAdapter(timelist);
@@ -188,7 +216,7 @@ public class Ps_fragment extends Fragment {
                             titleF=title.getText().toString();
                             message=wanttosay.getText().toString();
                             emailF=selfinwho.getText().toString();
-                            requestSmsPermission();
+
                             new AsyncTask<Void, Void, Void>() {
 
                                 @Override
@@ -220,9 +248,15 @@ public class Ps_fragment extends Fragment {
                             selectmail=0;
                             acc.dismiss();
                         }
-                       else if(selects==1){
 
-                            send();
+                       else if(selects==1){
+                            if(nowday==10){
+                                ActivityCompat.requestPermissions(getActivity(),new String[]{Manifest.permission.SEND_SMS},1);
+                                requestSmsPermission();
+                                send();
+
+                            }
+                            acc.dismiss();
                         }
                     }
                 });

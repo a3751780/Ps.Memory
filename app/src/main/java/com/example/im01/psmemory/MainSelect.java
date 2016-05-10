@@ -1,5 +1,6 @@
 package com.example.im01.psmemory;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -9,12 +10,14 @@ import android.widget.Button;
 
 public class MainSelect extends AppCompatActivity {
     Button ps,memory;
+    Activity main;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_select);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        main=this;
         ps=(Button)findViewById(R.id.button6);
         memory=(Button)findViewById(R.id.button13);
         ps.setOnClickListener(new View.OnClickListener() {
@@ -24,6 +27,7 @@ public class MainSelect extends AppCompatActivity {
                 i.setClass(MainSelect.this,MainActivity.class);
                // i.putExtra("id",1);
                 startActivity(i);
+                main.finish();
             }
         });
 
@@ -34,6 +38,7 @@ public class MainSelect extends AppCompatActivity {
                 x.setClass(MainSelect.this,MainActivity.class);
                 x.putExtra("id",1);
                 startActivity(x);
+                main.finish();
             }
         });
 
