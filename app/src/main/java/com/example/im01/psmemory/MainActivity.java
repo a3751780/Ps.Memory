@@ -49,8 +49,7 @@ public class MainActivity extends ActionBarActivity
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-
+     //   Service();
         tabHost= (FragmentTabHost) findViewById(android.R.id.tabhost);
         tabHost.setup(this, getSupportFragmentManager(), R.id.realtabcontent);
         // Here, thisActivity is the current activity
@@ -87,7 +86,10 @@ public class MainActivity extends ActionBarActivity
         }
     }
 
-
+    public void Service(){
+        Intent i=new Intent(this,Pm_Service.class);
+        startService(i);
+    }
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -104,6 +106,7 @@ public class MainActivity extends ActionBarActivity
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
     }
+
     @Override
     protected void onResume() {
         int id = getIntent().getIntExtra("id", 0);

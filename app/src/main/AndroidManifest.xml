@@ -35,12 +35,9 @@
             android:launchMode="singleTask"
             android:theme="@android:style/Theme.Translucent.NoTitleBar">
             <intent-filter>
-
                 <!-- Change this to be db- followed by your app key -->
                 <data android:scheme="db-e8fqg1fie8sirlr" />
-
                 <action android:name="android.intent.action.VIEW" />
-
                 <category android:name="android.intent.category.BROWSABLE" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
@@ -73,6 +70,9 @@
             android:name=".PsShow"
             android:label="@string/title_activity_ps_show"
             android:theme="@style/AppTheme.NoActionBar" />
+        <service
+            android:name=".Pm_Service" >
+        </service>
         <activity
             android:name=".MenberIn"
             android:label="@string/title_activity_menber_in"

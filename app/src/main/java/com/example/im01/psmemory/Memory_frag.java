@@ -22,6 +22,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CalendarView;
 import android.widget.ImageView;
 import android.widget.Spinner;
 
@@ -40,11 +41,11 @@ import java.io.OutputStream;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-
+import java.util.TimeZone;
 
 
 public class Memory_frag extends Fragment {
-
+    private CalendarView cv;
     private String value = "";
     private Spinner method;
     Button fromfriend,nowtime,next;
@@ -55,7 +56,13 @@ public class Memory_frag extends Fragment {
     String methodselect[]={"請選擇要紀念的對象"};
     Context context;
     File file;
-
+    String[] Date;
+    int selyear,selmonth,selday;
+    int nowyear,nowmonth,nowday;
+    Calendar cal = Calendar.getInstance();
+    String dat;
+    SimpleDateFormat sf = new SimpleDateFormat("yyyy/MM/dd");
+    String date = " ";
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
@@ -73,7 +80,7 @@ public class Memory_frag extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final View root=inflater.inflate(R.layout.activity_memory_frag, container, false);
         imageView = (ImageView)root.findViewById(R.id.imageView2);
-
+        cv=(CalendarView)root.findViewById(R.id.calendarView);
         myDropboxTool  = new DBRoulette(getActivity());
         method=(Spinner)root.findViewById(R.id.spinner);
         methodlist = new ArrayAdapter<String>(getActivity(),
@@ -98,13 +105,7 @@ public class Memory_frag extends Fragment {
         nowtime.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                Calendar c=Calendar.getInstance();
-
-                SimpleDateFormat df=new SimpleDateFormat("yyyy/MM/dd");
-                String date=df.format(c.getTime());
-
-                Toast.makeText(getActivity(),date,Toast.LENGTH_LONG).show();
+                settime();
             }
         });
 
@@ -139,9 +140,23 @@ public class Memory_frag extends Fragment {
 
             }
         });
+            cv.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
+                @Override
+                public void onSelectedDayChange(CalendarView view, int year, int month, int dayOfMonth) {
+                    selyear=year;selmonth=month;selday=dayOfMonth;
+
+                }
+            });
+
+
+
+
         return  root;
     }
     public void settime(){
+        Calendar day=Calendar.getInstance();
+
+        cv.setDate(day.getTimeInMillis());
 
     }
     @Override
@@ -197,10 +212,16 @@ public class Memory_frag extends Fragment {
         }
         return result;
     }
+
     public void inputstreamtofile(InputStream ins,File file){
 
     }
 
+    public void GetDateTime(){
+
+
+
+    }
     @Override
     public void onResume() {//Return to your app after user authorization
         super.onResume();

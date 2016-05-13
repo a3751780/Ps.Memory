@@ -1,12 +1,15 @@
 package com.example.im01.psmemory;
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 public class MainSelect extends AppCompatActivity {
     Button ps,memory;
@@ -17,6 +20,7 @@ public class MainSelect extends AppCompatActivity {
         setContentView(R.layout.activity_main_select);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        Service();
         main=this;
         ps=(Button)findViewById(R.id.button6);
         memory=(Button)findViewById(R.id.button13);
@@ -42,6 +46,10 @@ public class MainSelect extends AppCompatActivity {
             }
         });
 
+    }
+    public void Service(){
+        Intent i=new Intent(this,Pm_Service.class);
+        startService(i);
     }
 
 }
