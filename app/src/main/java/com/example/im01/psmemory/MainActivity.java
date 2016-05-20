@@ -2,9 +2,7 @@ package com.example.im01.psmemory;
 
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTabHost;
 import android.support.v7.app.ActionBarActivity;
@@ -19,26 +17,15 @@ import android.support.v7.app.ActionBarDrawerToggle;
 
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.dropbox.client2.DropboxAPI;
-import com.dropbox.client2.android.AndroidAuthSession;
-import com.dropbox.client2.session.AppKeyPair;
-import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
-import com.firebase.client.FirebaseError;
-import com.firebase.client.ValueEventListener;
-
-import java.io.File;
-import java.io.FileInputStream;
 
 public class MainActivity extends ActionBarActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     Firebase myFirebaseRef ;
-
+    Ps ps=new Ps();
     TextView membername,memberemail;
     FragmentTabHost tabHost;
     Activity Main;
@@ -49,7 +36,7 @@ public class MainActivity extends ActionBarActivity
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-     //   Service();
+        Service();
         tabHost= (FragmentTabHost) findViewById(android.R.id.tabhost);
         tabHost.setup(this, getSupportFragmentManager(), R.id.realtabcontent);
         // Here, thisActivity is the current activity
@@ -68,7 +55,9 @@ public class MainActivity extends ActionBarActivity
        // change=(Button)findViewById(R.id.button);
         //name=(TextView)findViewById(R.id.textView2);
         myFirebaseRef = new Firebase("https://sweltering-torch-4496.firebaseio.com/");
+      // Log.e("pass",member.accanswer);
 
+      //  Log.e("Save",ps.sendtimeS[0]);
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);

@@ -1,19 +1,10 @@
 package com.example.im01.psmemory;
 
 import android.app.Service;
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
 import android.os.IBinder;
 import android.util.Log;
-import android.widget.Toast;
-
 import com.example.im01.psmemory.Gmail.GMailSender;
-import com.firebase.client.DataSnapshot;
-import com.firebase.client.Firebase;
-import com.firebase.client.FirebaseError;
-import com.firebase.client.ValueEventListener;
-
 import java.text.SimpleDateFormat;
 import java.util.TimeZone;
 
@@ -25,11 +16,13 @@ public class Pm_Service extends Service {
     String date = " ";
     String[] Date;
     String[] Time;
-   // Firebase myfirebase=new Firebase("https://sweltering-torch-4496.firebaseio.com/").child("Ps");
+    Ps ps=new Ps();
     SimpleDateFormat sf = new SimpleDateFormat("yyyy/MM/dd");
     SimpleDateFormat nowtime = new SimpleDateFormat("HH:mm:ss");
     int nowyear=0,nowmonth=0,nowday=0,nowminute=0,nowhour=0,nowsecond=0;
     GMailSender sender=new GMailSender("s3751780@gmail.com ","happy0204");
+    String sendtime;
+    int sendtimeI[];
 
     @Override
     public IBinder onBind(Intent intent) {
@@ -65,32 +58,26 @@ public class Pm_Service extends Service {
                     nowhour=Integer.valueOf(Time[0]);//hour 是24小時制
                     nowminute=Integer.valueOf(Time[1]);
                     nowsecond = Integer.valueOf(Time[2]);
+                    Log.e(TAG,date);
+                   // Log.e(TAG,ps.sendtimeS[0]);
 
-                    /*myfirebase.child("Ps"+count).addValueEventListener(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(DataSnapshot dataSnapshot) {
-                            count++;
+                        //date是現在時間
+                        if(date.equals(ps.sendtimeS[0])){
 
-                            //  name.setText( String.valueOf(dataSnapshot.getValue()));
+                            try{
+                                sender.sendMail(ps.titleS[0],ps.messageS[0],"s3751780@gmail.com","s3751780@gmail.com");
+                            }catch(Exception e){
 
-                        }
-                        @Override
-                        public void onCancelled(FirebaseError firebaseError) {
+                                e.printStackTrace();
 
-                        }
+                            }
+                            break;
 
-                    });*/
-                    if(nowminute==52){
-                        try{
-                            sender.sendMail("ff","sdfdf","s3751780@gmail.com","s3751780@gmail.com");
-                        }catch(Exception e){
 
-                            e.printStackTrace();
-
-                        }
-                        break;
+                       // break;
                     }
-                    Log.e(TAG,Time[1]);
+
+
                     try {
                        Thread.sleep(1000);
                     } catch (InterruptedException e) {

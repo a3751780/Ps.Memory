@@ -4,11 +4,48 @@
     android:layout_height="wrap_content"
     android:weightSum="1"
     android:background="#c4be75">
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:background="#f9ff3e"
+        android:id="@+id/linearLayout2">
+
+        <TextView
+            android:layout_width="388dp"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="想什麼時候說"
+            android:id="@+id/textView22" />
+    </LinearLayout>
+
 <LinearLayout
     android:orientation="horizontal"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:id="@+id/linearLayout">
+
+</LinearLayout>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="時間確定"
+        android:id="@+id/accept"
+        android:layout_below="@+id/spinner2"
+        android:layout_toRightOf="@+id/linearLayout"
+        android:layout_toEndOf="@+id/linearLayout" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="我還沒想好"
+        android:id="@+id/button9"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_below="@+id/spinner2" />
 
     <EditText
         android:layout_width="237dp"
@@ -17,7 +54,7 @@
         android:ems="10"
         android:id="@+id/editText6"
         android:hint="請輸入時間"
-        android:layout_centerVertical="true"
+        android:layout_below="@+id/linearLayout2"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
 
@@ -25,26 +62,7 @@
         android:layout_width="77dp"
         android:layout_height="46dp"
         android:id="@+id/spinner2"
-        android:layout_centerVertical="true"
-        android:layout_toRightOf="@+id/editText6"
-        android:layout_toEndOf="@+id/editText6" />
-</LinearLayout>
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="時間確定"
-        android:id="@+id/accept"
-        android:layout_below="@+id/linearLayout"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="我還沒想好"
-        android:id="@+id/button9"
-        android:layout_below="@+id/linearLayout"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+        android:layout_alignTop="@+id/editText6"
+        android:layout_alignLeft="@+id/button9"
+        android:layout_alignStart="@+id/button9" />
 </RelativeLayout>

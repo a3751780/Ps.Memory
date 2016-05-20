@@ -24,7 +24,8 @@ public class Friend extends AppCompatActivity {
     Firebase mfirebase;
     TextView namef,emailf,sex,phone;
     String memberlist;
-    Button back;
+    Button back,choice;
+    String count;
     String emailM,nameM,sexM,phoneM;
     //String count="0";
     private String[] list={"Tyson","Gino"};
@@ -50,14 +51,15 @@ public class Friend extends AppCompatActivity {
 
             if(position==0){
 
-                String count="1";
+                count="1";
 
                 Log.e("COUNT",count);
+
                 if(count.equals("1")){
 
                     final Dialog set=new Dialog(Friend.this);
                     set.setContentView(R.layout.dialog_friend);
-
+                    choice=(Button)set.findViewById(R.id.select);
                     namef=(TextView)set.findViewById(R.id.namef);
                     emailf=(TextView)set.findViewById(R.id.emailf);
                     sex=(TextView)set.findViewById(R.id.sex);
@@ -65,11 +67,28 @@ public class Friend extends AppCompatActivity {
                     findmember(count);
                     back=(Button)set.findViewById(R.id.button16);
 
+                    namef.setText(nameM);
+                    emailf.setText(emailM);
+                    sex.setText(sexM);
+                    phone.setText(phoneM);
+
                     back.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
 
                             set.dismiss();
+                        }
+                    });
+                    choice.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent i=new Intent();
+                            i.setClass(Friend.this,MainActivity.class);
+                            Bundle bundle=new Bundle();
+                            bundle.putString("mail",emailM);
+                            i.putExtras(bundle);
+
+                            startActivity(i);
                         }
                     });
                     set.setTitle("好友資訊");
@@ -80,26 +99,41 @@ public class Friend extends AppCompatActivity {
 
             }
             else if(position==1){
-                String count="2";
+                count="2";
 
                 Log.e("COUNT",count);
                 if(count.equals("2")){
 
                     final Dialog set=new Dialog(Friend.this);
                     set.setContentView(R.layout.dialog_friend);
-
+                    choice=(Button)set.findViewById(R.id.select);
                     namef=(TextView)set.findViewById(R.id.namef);
                     emailf=(TextView)set.findViewById(R.id.emailf);
                     sex=(TextView)set.findViewById(R.id.sex);
                     phone=(TextView)set.findViewById(R.id.phone);
                     findmember(count);
                     back=(Button)set.findViewById(R.id.button16);
-
+                    namef.setText(nameM);
+                    emailf.setText(emailM);
+                    sex.setText(sexM);
+                    phone.setText(phoneM);
                     back.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
 
                             set.dismiss();
+                        }
+                    });
+                    choice.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent i=new Intent();
+                            i.setClass(Friend.this,MainActivity.class);
+                            Bundle bundle=new Bundle();
+                            bundle.putString("mail",emailM);
+                            i.putExtras(bundle);
+
+                            startActivity(i);
                         }
                     });
                     set.setTitle("好友資訊");
@@ -186,10 +220,7 @@ public class Friend extends AppCompatActivity {
             }
 
         });
-        namef.setText(nameM);
-        emailf.setText(emailM);
-        sex.setText(sexM);
-        phone.setText(phoneM);
+
     }
 
 }

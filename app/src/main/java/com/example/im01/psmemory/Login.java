@@ -2,8 +2,6 @@ package com.example.im01.psmemory;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -17,6 +15,7 @@ import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
 
 public class Login extends AppCompatActivity {
+
     Button login;
     Button account;
     String accountM,passM,emailM;
@@ -75,10 +74,8 @@ public class Login extends AppCompatActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 accountM=String.valueOf(dataSnapshot.getValue());
                 System.out.println(dataSnapshot.getValue());
-                System.out.println(member.accanswer);
-
+               // System.out.println(member.accanswer);
                 //  name.setText( String.valueOf(dataSnapshot.getValue()));
-
             }
 
             @Override
@@ -92,7 +89,7 @@ public class Login extends AppCompatActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 passM=String.valueOf(dataSnapshot.getValue());
                 System.out.println(dataSnapshot.getValue());
-                System.out.println( member.passworda);
+              //  System.out.println( member.passworda);
 
                 //  name.setText( String.valueOf(dataSnapshot.getValue()));
 
@@ -104,6 +101,7 @@ public class Login extends AppCompatActivity {
             }
 
         });
+
         account.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -122,11 +120,12 @@ public class Login extends AppCompatActivity {
                     member.email=emailM;
                     member.accanswer=accountM;
                     member.passworda=passM;
+
                 }
-                else if(accounte.getText().toString()==null){
+                else if(accounte.getText().toString().equals("")){
                     Toast.makeText(Login.this,"帳號尚未輸入喔",Toast.LENGTH_LONG).show();
                 }
-                else if(password.getText().toString()==null){
+                else if(password.getText().toString().equals("")){
                     Toast.makeText(Login.this,"密碼尚未輸入喔",Toast.LENGTH_LONG).show();
                 }
                 else{

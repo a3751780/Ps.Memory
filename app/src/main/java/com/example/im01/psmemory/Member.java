@@ -8,4 +8,5 @@ public class Member {
     public static String passworda;
     public static String email;
 
+
 }

@@ -6,7 +6,6 @@ import android.app.Dialog;
 import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
@@ -41,7 +40,10 @@ public class Ps_fragment extends Fragment {
     SimpleDateFormat nowtime = new SimpleDateFormat("HH:mm:ss");
     String date = " ";
     EditText wanttosay,title;
+    int fromfriend=0;
     String inputday,inputmonth,inputyear;
+    Ps ps=new Ps();
+    Boolean selectmethod=false;
     private Spinner method;
     int count=2;
     private Spinner time;
@@ -61,10 +63,14 @@ public class Ps_fragment extends Fragment {
     String titleF,message,emailF;
     String phone;
     String[] Date;
-    int nowyear,nowmonth,nowday;
+    Bundle bd;
+
+    String mail;
+    int selecttime ,sendday;
+    int nowyear,nowmonth,nowday,sendtime;
     GMailSender sender=new GMailSender("s3751780@gmail.com ","happy0204");
     EditText inputtime;
-
+    EditText friendinwho;
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
@@ -80,6 +86,10 @@ public class Ps_fragment extends Fragment {
         wholayout= (LinearLayout)root.findViewById (R.id.whoed);
         wanttosay=(EditText)root.findViewById(R.id.editText5);
         title=(EditText)root.findViewById(R.id.editText4);
+
+       // bd=getActivity().getIntent().getExtras();
+       // mail=bd.getString("mail");
+
         mfirebase=new Firebase("https://sweltering-torch-4496.firebaseio.com/").child("Ps");
         methodlist = new ArrayAdapter<String>(getActivity(),
                 android.R.layout.simple_spinner_item,methodselect);
@@ -98,14 +108,14 @@ public class Ps_fragment extends Fragment {
         Log.e("Month",Date[1]);
         Log.e("Day",Date[2]);
               ///  Toast.makeText(getActivity(),date,Toast.LENGTH_LONG).show();
+
         method.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-
-
                if(position==0){
                    System.out.print("nice");
                    Log.e("S","請選擇");
+                   //selectmethod=true;
                }else if(position==1){
                    final Dialog set=new Dialog(getActivity());
 
@@ -116,6 +126,7 @@ public class Ps_fragment extends Fragment {
                    friend=(Button)set.findViewById(R.id.buttonf);
                    selectmail=0;
                    selects=1;
+
                    selfin.setOnClickListener(new View.OnClickListener() {
                        @Override
                        public void onClick(View v) {
@@ -125,6 +136,7 @@ public class Ps_fragment extends Fragment {
                            selfinwho.setHint("告訴我他的電話");
                            selectmail=0;
                            selects=1;
+                           selectmethod=true;
                            wholayout.addView(selfinwho);
                            set.dismiss();
                        }
@@ -133,10 +145,11 @@ public class Ps_fragment extends Fragment {
                        @Override
                        public void onClick(View v) {
                            // wholayout.removeAllViews();
-                           EditText friendinwho=new EditText(getActivity());
-
+                           friendinwho=new EditText(getActivity());
+                           selectmethod=true;
                            wholayout.addView(friendinwho);
                            Intent i=new Intent();
+                           fromfriend=1;
                            i.setClass(getActivity(),Friend.class);
                            startActivity(i);
                        }
@@ -155,7 +168,7 @@ public class Ps_fragment extends Fragment {
                    selfin.setOnClickListener(new View.OnClickListener() {
                        @Override
                        public void onClick(View v) {
-
+                           selectmethod=true;
                            wholayout.removeAllViews();
                            selfinwho=new EditText(getActivity());
                            selfinwho.setHint("告訴我他的E-mail");
@@ -168,8 +181,9 @@ public class Ps_fragment extends Fragment {
                        @Override
                        public void onClick(View v) {
                           // wholayout.removeAllViews();
-                           EditText friendinwho=new EditText(getActivity());
-
+                           friendinwho=new EditText(getActivity());
+                           selectmethod=true;
+                           fromfriend=2;
                            wholayout.addView(friendinwho);
                            Intent i=new Intent();
                            i.setClass(getActivity(),Friend.class);
@@ -191,67 +205,190 @@ public class Ps_fragment extends Fragment {
         accept.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                contactmethod=selfin.getText().toString();
-                contactmethod=friend.getText().toString();
-                final Dialog acc=new Dialog(getActivity());
-                acc.setContentView(R.layout.dialog_accept);
-                inputtime=(EditText)acc.findViewById(R.id.editText6);
-                acc.setTitle("想多久問候他");
-                acc.show();
-                time=(Spinner)acc.findViewById(R.id.spinner2);
-                acceptd=(Button)acc.findViewById(R.id.accept);
 
-                timelist = new ArrayAdapter<String>(getActivity(),
-                        android.R.layout.simple_spinner_item,timeselect);
-                time.setAdapter(timelist);
-                time.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                    @Override
-                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                        if(position==0){
-                            inputday=inputtime.getText().toString();
+                if(selectmethod==false){
+                    Toast.makeText(getActivity(),"還沒選擇訴說方式喔喔",Toast.LENGTH_LONG).show();
+                   // System.out.println(selectmathod);
+                }
+                else if(selectmethod==true){
+                  //  System.out.println(selectmathod);
 
-                        }else if(position==1){
-                            inputmonth=inputtime.getText().toString();
+                    contactmethod=selfin.getText().toString();
+                    contactmethod=friend.getText().toString();
 
-                        }else if(position==2){
-                            inputyear=inputtime.getText().toString();
+                    final Dialog acc=new Dialog(getActivity());
+                    acc.setContentView(R.layout.dialog_accept);
+                    inputtime=(EditText)acc.findViewById(R.id.editText6);
+                    acc.setTitle("想多久問候他");
+                    acc.show();
+                    time=(Spinner)acc.findViewById(R.id.spinner2);
+                    acceptd=(Button)acc.findViewById(R.id.accept);
 
-                        }
-                    }
+                    timelist = new ArrayAdapter<String>(getActivity(),
+                            android.R.layout.simple_spinner_item,timeselect);
+                    time.setAdapter(timelist);
 
-                    @Override
-                    public void onNothingSelected(AdapterView<?> parent) {
+                    time.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                        @Override
+                        public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                            if(position==0){
+                                selecttime=0;
+                                inputday=inputtime.getText().toString();
 
-                    }
-                });
-                acceptd.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        count++;
-                        if(selectmail==1){
-                            mfirebase.child("Ps"+count).child("message").setValue(wanttosay.getText().toString());
-                            mfirebase.child("Ps"+count).child("title").setValue(title.getText().toString());
-                            mfirebase.child("Ps"+count).child("e-mail").setValue(selfinwho.getText().toString());
-                            mfirebase.child("Ps"+count).child("sendtime").setValue(inputtime.getText().toString());
-                            Log.e("主旨",title.getText().toString());
-                            Log.e("訊息",wanttosay.getText().toString());
-                            Log.e("收件人",selfinwho.getText().toString());
-                            Log.e("頻率",inputtime.getText().toString());
+                            }else if(position==1){
+                                selecttime=1;
+                                inputmonth=inputtime.getText().toString();
 
-                            selectmail=0;
-                            acc.dismiss();
+                            }else if(position==2){
+                                selecttime=2;
+                                inputyear=inputtime.getText().toString();
+
+                            }
                         }
 
-                       else if(selects==1){
+                        @Override
+                        public void onNothingSelected(AdapterView<?> parent) {
 
-                            ActivityCompat.requestPermissions(getActivity(),new String[]{Manifest.permission.SEND_SMS},1);
-                            requestSmsPermission();
-                            send();
-                            selects=0;
-                            acc.dismiss();
                         }
-                    }
-                });
+                    });
+                    acceptd.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            count++;
+                            String want=wanttosay.getText().toString();
+                            String ti= title.getText().toString();
+                            String self= selfinwho.getText().toString();
+
+                            if(want.equals("")){
+                                Toast.makeText(getActivity(),"還沒輸入想說的話喔",Toast.LENGTH_LONG).show();
+                            }
+                            else  if(ti.equals("")){
+                                Toast.makeText(getActivity(),"還沒輸入主旨喔",Toast.LENGTH_LONG).show();
+                            }
+                            else if(self.equals("")){
+                                Toast.makeText(getActivity(),"還沒輸入email喔",Toast.LENGTH_LONG).show();
+                            }
+                            else {
+
+                                System.out.println("你進來了"+wanttosay.getText().toString()+title.getText().toString()+selfinwho.getText().toString());
+                                if(selectmail==1){
+                                    sendtime=Integer.valueOf(inputtime.getText().toString());
+                                    mfirebase.child("Ps"+count).child("message").setValue(wanttosay.getText().toString());
+                                    mfirebase.child("Ps"+count).child("title").setValue(title.getText().toString());
+                                    mfirebase.child("Ps"+count).child("e-mail").setValue(selfinwho.getText().toString());
+                                    if(selecttime==0){
+                                        sendday=nowday+sendtime;
+                                        mfirebase.child("Ps"+count).child("sendtime").setValue(nowyear+"/"+nowmonth+"/"+sendday);
+                                    }else if(selecttime==1){
+                                        sendday=nowmonth+sendtime;
+                                        mfirebase.child("Ps"+count).child("sendtime").setValue(nowyear+"/"+sendday+"/"+nowday);
+                                    }else if(selecttime==2){
+                                        sendday=nowyear+sendtime;
+                                        mfirebase.child("Ps"+count).child("sendtime").setValue(sendday+"/"+nowmonth+"/"+nowday);
+                                    }
+
+                                    else{
+                                        Toast.makeText(getActivity(),"還沒輸入時間喔",Toast.LENGTH_LONG).show();
+
+                                    }
+
+                                    Log.e("主旨",title.getText().toString());
+                                    Log.e("訊息",wanttosay.getText().toString());
+                                    Log.e("收件人",selfinwho.getText().toString());
+                                    Log.e("頻率",inputtime.getText().toString());
+
+                                    selectmail=0;
+                                    acc.dismiss();
+                                }
+                                else if(selects==1){
+                                    sendtime=Integer.valueOf(inputtime.getText().toString());
+                                    mfirebase.child("Ps"+count).child("message").setValue(wanttosay.getText().toString());
+                                    mfirebase.child("Ps"+count).child("title").setValue(title.getText().toString());
+                                    mfirebase.child("Ps"+count).child("phonenumber").setValue(selfinwho.getText().toString());
+                                    if(selecttime==0){
+                                        sendday=nowday+sendtime;
+                                        mfirebase.child("Ps"+count).child("sendtime").setValue(nowyear+"/"+nowmonth+"/"+sendday);
+                                    }else if(selecttime==1){
+                                        sendday=nowmonth+sendtime;
+                                        mfirebase.child("Ps"+count).child("sendtime").setValue(nowyear+"/"+sendday+"/"+nowday);
+                                    }else if(selecttime==2){
+                                        sendday=nowyear+sendtime;
+                                        mfirebase.child("Ps"+count).child("sendtime").setValue(sendday+"/"+nowmonth+"/"+nowday);
+                                    }
+
+                                    else{
+                                        Toast.makeText(getActivity(),"還沒輸入時間喔",Toast.LENGTH_LONG).show();
+
+                                    }
+                                    ActivityCompat.requestPermissions(getActivity(),new String[]{Manifest.permission.SEND_SMS},1);
+                                    requestSmsPermission();
+                                    send();
+                                    selects=0;
+                                    acc.dismiss();
+                                }
+                                else if(fromfriend==1){
+                                    ActivityCompat.requestPermissions(getActivity(),new String[]{Manifest.permission.SEND_SMS},1);
+                                    requestSmsPermission();
+                                    friendinwho.setText(mail);
+                                    sendtime=Integer.valueOf(inputtime.getText().toString());
+                                    mfirebase.child("Ps"+count).child("message").setValue(wanttosay.getText().toString());
+                                    mfirebase.child("Ps"+count).child("title").setValue(title.getText().toString());
+                                    mfirebase.child("Ps"+count).child("phonenumber").setValue(friendinwho.getText().toString());
+                                    if(selecttime==0){
+                                        sendday=nowday+sendtime;
+                                        mfirebase.child("Ps"+count).child("sendtime").setValue(nowyear+"/"+nowmonth+"/"+sendday);
+                                    }else if(selecttime==1){
+                                        sendday=nowmonth+sendtime;
+                                        mfirebase.child("Ps"+count).child("sendtime").setValue(nowyear+"/"+sendday+"/"+nowday);
+                                    }else if(selecttime==2){
+                                        sendday=nowyear+sendtime;
+                                        mfirebase.child("Ps"+count).child("sendtime").setValue(sendday+"/"+nowmonth+"/"+nowday);
+                                    }
+
+                                    else{
+                                        Toast.makeText(getActivity(),"還沒輸入時間喔",Toast.LENGTH_LONG).show();
+
+                                    }
+                                    send();
+                                    fromfriend=0;
+                                    acc.dismiss();
+
+                                }else if(fromfriend==2){
+                                    sendtime=Integer.valueOf(inputtime.getText().toString());
+                                    friendinwho.setText(mail);
+                                    mfirebase.child("Ps"+count).child("message").setValue(wanttosay.getText().toString());
+                                    mfirebase.child("Ps"+count).child("title").setValue(title.getText().toString());
+                                    mfirebase.child("Ps"+count).child("e-mail").setValue(mail);
+
+                                    if(selecttime==0){
+                                        sendday=nowday+sendtime;
+                                        mfirebase.child("Ps"+count).child("sendtime").setValue(nowyear+"/"+nowmonth+"/"+sendday);
+                                    }else if(selecttime==1){
+                                        sendday=nowmonth+sendtime;
+                                        mfirebase.child("Ps"+count).child("sendtime").setValue(nowyear+"/"+sendday+"/"+nowday);
+                                    }else if(selecttime==2){
+                                        sendday=nowyear+sendtime;
+                                        mfirebase.child("Ps"+count).child("sendtime").setValue(sendday+"/"+nowmonth+"/"+nowday);
+                                    }
+                                    else{
+                                        Toast.makeText(getActivity(),"還沒輸入時間喔",Toast.LENGTH_LONG).show();
+
+                                    }
+
+                                    Log.e("主旨",title.getText().toString());
+                                    Log.e("訊息",wanttosay.getText().toString());
+                                    Log.e("收件人",mail);
+                                    Log.e("頻率",inputtime.getText().toString());
+                                    fromfriend=0;
+                                    acc.dismiss();
+                                }
+
+                            }
+
+                        }
+                    });
+                }
+
             }
         });
 
@@ -289,15 +426,6 @@ public class Ps_fragment extends Fragment {
     }
 
     private void send(){
-        mfirebase.child("Ps"+count).child("message").setValue(wanttosay.getText().toString());
-        mfirebase.child("Ps"+count).child("title").setValue(title.getText().toString());
-        mfirebase.child("Ps"+count).child("phonenumber").setValue(selfinwho.getText().toString());
-        Log.e("主旨",title.getText().toString());
-        Log.e("訊息",wanttosay.getText().toString());
-        Log.e("收件人",selfinwho.getText().toString());
-        titleF=title.getText().toString();
-        message=wanttosay.getText().toString();
-        phone=selfinwho.getText().toString();
 
         SmsManager smsManager = SmsManager.getDefault();
         try{
