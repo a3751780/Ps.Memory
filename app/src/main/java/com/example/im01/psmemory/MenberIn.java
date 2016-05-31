@@ -9,9 +9,12 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.firebase.client.Firebase;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class MenberIn extends AppCompatActivity {
-    Firebase mfirebase;
+    FirebaseDatabase database = FirebaseDatabase.getInstance();
+    DatabaseReference myRef = database.getReference("message");
     TextView name,password,email;
     Member member=new Member();
     @Override
@@ -20,7 +23,7 @@ public class MenberIn extends AppCompatActivity {
         setContentView(R.layout.activity_menber_in);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        mfirebase=new Firebase("https://sweltering-torch-4496.firebaseio.com/");
+
         name=(TextView)findViewById(R.id.name);
         password=(TextView)findViewById(R.id.password);
         email=(TextView)findViewById(R.id.email);

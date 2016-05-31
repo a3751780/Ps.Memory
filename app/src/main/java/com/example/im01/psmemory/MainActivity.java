@@ -20,11 +20,14 @@ import android.view.MenuItem;
 import android.widget.TextView;
 
 import com.firebase.client.Firebase;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class MainActivity extends ActionBarActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    Firebase myFirebaseRef ;
+    FirebaseDatabase database = FirebaseDatabase.getInstance();
+    DatabaseReference myRef = database.getReference("message");
     Ps ps=new Ps();
     TextView membername,memberemail;
     FragmentTabHost tabHost;
@@ -37,6 +40,7 @@ public class MainActivity extends ActionBarActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         Service();
+
         tabHost= (FragmentTabHost) findViewById(android.R.id.tabhost);
         tabHost.setup(this, getSupportFragmentManager(), R.id.realtabcontent);
         // Here, thisActivity is the current activity
@@ -54,7 +58,7 @@ public class MainActivity extends ActionBarActivity
         Firebase.setAndroidContext(this);
        // change=(Button)findViewById(R.id.button);
         //name=(TextView)findViewById(R.id.textView2);
-        myFirebaseRef = new Firebase("https://sweltering-torch-4496.firebaseio.com/");
+
       // Log.e("pass",member.accanswer);
 
       //  Log.e("Save",ps.sendtimeS[0]);
@@ -66,6 +70,7 @@ public class MainActivity extends ActionBarActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
         if(navigationView.getHeaderCount() > 0) {
             View header = navigationView.getHeaderView(0);
             membername=(TextView)header.findViewById(R.id.membername);

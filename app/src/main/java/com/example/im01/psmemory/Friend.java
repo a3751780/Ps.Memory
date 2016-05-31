@@ -13,22 +13,25 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.firebase.client.DataSnapshot;
-import com.firebase.client.Firebase;
-import com.firebase.client.FirebaseError;
-import com.firebase.client.ValueEventListener;
+
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 public class Friend extends AppCompatActivity {
     Button accept,cancel;
     ListView friendlist;
-    Firebase mfirebase;
+    FirebaseDatabase database = FirebaseDatabase.getInstance();
+    DatabaseReference myRef = database.getReference("account");
     TextView namef,emailf,sex,phone;
     String memberlist;
     Button back,choice;
     String count;
     String emailM,nameM,sexM,phoneM;
     //String count="0";
-    private String[] list={"Tyson","Gino"};
+    String[] list={"Tyson","Gino"};
     private ArrayAdapter<String> listAdapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,15 +39,23 @@ public class Friend extends AppCompatActivity {
         setContentView(R.layout.activity_friend);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        mfirebase=new Firebase("https://sweltering-torch-4496.firebaseio.com/");
+
+
         accept=(Button)findViewById(R.id.button11);
         cancel=(Button)findViewById(R.id.button12);
         friendlist=(ListView)findViewById(R.id.listView);
-
+        //設定listview值
+        int countlist=1;
+        for(int i = 0 ; i < 3 ; i++){
+            findname(countlist);
+           // list[i]="";
+            countlist++;
+        }
 
         listAdapter = new ArrayAdapter(this,android.R.layout.simple_list_item_1,list);
         friendlist.setAdapter(listAdapter);
 
+        //設定listview監聽
         friendlist.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -79,6 +90,7 @@ public class Friend extends AppCompatActivity {
                             set.dismiss();
                         }
                     });
+
                     choice.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
@@ -118,6 +130,7 @@ public class Friend extends AppCompatActivity {
                     sex.setText(sexM);
                     phone.setText(phoneM);
                     back.setOnClickListener(new View.OnClickListener() {
+
                         @Override
                         public void onClick(View v) {
 
@@ -125,6 +138,7 @@ public class Friend extends AppCompatActivity {
                         }
                     });
                     choice.setOnClickListener(new View.OnClickListener() {
+
                         @Override
                         public void onClick(View v) {
                             Intent i=new Intent();
@@ -139,8 +153,6 @@ public class Friend extends AppCompatActivity {
                     set.setTitle("好友資訊");
                     set.show();
                 }
-
-
             }
 
             }
@@ -168,57 +180,85 @@ public class Friend extends AppCompatActivity {
     }
 
     public void findmember(String count){
-        mfirebase.child("account").child("member"+count).child("email").addValueEventListener(new ValueEventListener() {
+        myRef.child("member"+count).child("keyname").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                emailM=String.valueOf(dataSnapshot.getValue());
-                //  name.setText( String.valueOf(dataSnapshot.getValue()));
+                // This method is called once with the initial value and again
+                // whenever data at this location is updated.
+                nameM = dataSnapshot.getValue(String.class);
 
             }
+
             @Override
-            public void onCancelled(FirebaseError firebaseError) {
+            public void onCancelled(DatabaseError error) {
+                // Failed to read value
 
             }
-
         });
-        mfirebase.child("account").child("member"+count).child("sex").addValueEventListener(new ValueEventListener() {
+
+        myRef.child("member"+count).child("email").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                sexM=String.valueOf(dataSnapshot.getValue());
-                //  name.setText( String.valueOf(dataSnapshot.getValue()));
+                // This method is called once with the initial value and again
+                // whenever data at this location is updated.
+                emailM = dataSnapshot.getValue(String.class);
 
             }
+
             @Override
-            public void onCancelled(FirebaseError firebaseError) {
+            public void onCancelled(DatabaseError error) {
+                // Failed to read value
 
             }
-
         });
-        mfirebase.child("account").child("member"+count).child("phonenumber").addValueEventListener(new ValueEventListener() {
+        myRef.child("member"+count).child("phonenumber").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                phoneM=String.valueOf(dataSnapshot.getValue());
-                //  name.setText( String.valueOf(dataSnapshot.getValue()));
+                // This method is called once with the initial value and again
+                // whenever data at this location is updated.
+                phoneM = dataSnapshot.getValue(String.class);
 
             }
+
             @Override
-            public void onCancelled(FirebaseError firebaseError) {
+            public void onCancelled(DatabaseError error) {
+                // Failed to read value
+                Log.e("E","error");
 
             }
-
         });
-        mfirebase.child("account").child("member"+count).child("keyname").addValueEventListener(new ValueEventListener() {
+        myRef.child("member"+count).child("sex").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                nameM=String.valueOf(dataSnapshot.getValue());
-                //  name.setText( String.valueOf(dataSnapshot.getValue()));
+                // This method is called once with the initial value and again
+                // whenever data at this location is updated.
+                sexM = dataSnapshot.getValue(String.class);
 
             }
+
             @Override
-            public void onCancelled(FirebaseError firebaseError) {
+            public void onCancelled(DatabaseError error) {
+                // Failed to read value
+
+            }
+        });
+
+    }
+    public void findname(int count){
+        myRef.child("member"+count).child("keyname").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                // This method is called once with the initial value and again
+                // whenever data at this location is updated.
+                nameM = dataSnapshot.getValue(String.class);
 
             }
 
+            @Override
+            public void onCancelled(DatabaseError error) {
+                // Failed to read value
+
+            }
         });
 
     }

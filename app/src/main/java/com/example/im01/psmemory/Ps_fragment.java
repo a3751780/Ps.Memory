@@ -26,6 +26,7 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.example.im01.psmemory.Gmail.GMailSender;
+import com.example.im01.psmemory.Gmail.SelectFriend;
 import com.firebase.client.Firebase;
 
 import java.text.SimpleDateFormat;
@@ -114,8 +115,7 @@ public class Ps_fragment extends Fragment {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                if(position==0){
                    System.out.print("nice");
-                   Log.e("S","請選擇");
-                   //selectmethod=true;
+
                }else if(position==1){
                    final Dialog set=new Dialog(getActivity());
 
@@ -145,13 +145,16 @@ public class Ps_fragment extends Fragment {
                        @Override
                        public void onClick(View v) {
                            // wholayout.removeAllViews();
+                           Intent i=new Intent();
+                           i.setClass(getActivity(), SelectFriend.class);
+                           startActivity(i);
                            friendinwho=new EditText(getActivity());
                            selectmethod=true;
                            wholayout.addView(friendinwho);
-                           Intent i=new Intent();
+
                            fromfriend=1;
-                           i.setClass(getActivity(),Friend.class);
-                           startActivity(i);
+                           //i.setClass(getActivity(),Friend.class);
+                          // startActivity(i);
                        }
                    });
                 }
@@ -251,6 +254,7 @@ public class Ps_fragment extends Fragment {
 
                         }
                     });
+
                     acceptd.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {

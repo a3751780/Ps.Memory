@@ -9,10 +9,12 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.firebase.client.DataSnapshot;
-import com.firebase.client.Firebase;
-import com.firebase.client.FirebaseError;
-import com.firebase.client.ValueEventListener;
+
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 public class Login extends AppCompatActivity {
 
@@ -21,7 +23,8 @@ public class Login extends AppCompatActivity {
     String accountM,passM,emailM;
     Member member=new Member();
     EditText accounte,password;
-    Firebase myFirebaseRef ;
+    FirebaseDatabase database = FirebaseDatabase.getInstance();
+    DatabaseReference  myFirebaseRef = database.getReference("account");
     int count=0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,77 +32,62 @@ public class Login extends AppCompatActivity {
         setContentView(R.layout.activity_login);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        Firebase.setAndroidContext(this);
+
 
         login=(Button)findViewById(R.id.button3);
         account=(Button)findViewById(R.id.button4);
         accounte=(EditText)findViewById(R.id.editText2);
         password=(EditText)findViewById(R.id.editText);
-        myFirebaseRef = new Firebase("https://sweltering-torch-4496.firebaseio.com/").child("account");
-
-        //firebase
-        myFirebaseRef.child("member1").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                count++;
-                //  name.setText( String.valueOf(dataSnapshot.getValue()));
-
-
-            }
-
-            @Override
-            public void onCancelled(FirebaseError firebaseError) {
-
-            }
-
-        });
-
-        myFirebaseRef.child("member1").child("email").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-               emailM=String.valueOf(dataSnapshot.getValue());
-                //  name.setText( String.valueOf(dataSnapshot.getValue()));
-
-            }
-
-            @Override
-            public void onCancelled(FirebaseError firebaseError) {
-
-            }
-
-        });
 
         myFirebaseRef.child("member1").child("keyname").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                // This method is called once with the initial value and again
+                // whenever data at this location is updated.
+
                 accountM=String.valueOf(dataSnapshot.getValue());
-                System.out.println(dataSnapshot.getValue());
-               // System.out.println(member.accanswer);
-                //  name.setText( String.valueOf(dataSnapshot.getValue()));
+                System.out.println(String.valueOf(dataSnapshot.getValue()));
+
             }
 
             @Override
-            public void onCancelled(FirebaseError firebaseError) {
+            public void onCancelled(DatabaseError error) {
+                // Failed to read value
 
             }
-
         });
         myFirebaseRef.child("member1").child("keypassword").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                passM=String.valueOf(dataSnapshot.getValue());
-                System.out.println(dataSnapshot.getValue());
-              //  System.out.println( member.passworda);
+                // This method is called once with the initial value and again
+                // whenever data at this location is updated.
 
-                //  name.setText( String.valueOf(dataSnapshot.getValue()));
+                passM=String.valueOf(dataSnapshot.getValue());
+                System.out.println(String.valueOf(dataSnapshot.getValue()));
 
             }
 
             @Override
-            public void onCancelled(FirebaseError firebaseError) {
+            public void onCancelled(DatabaseError error) {
+                // Failed to read value
+
+            }
+        });
+        myFirebaseRef.child("member1").child("email").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                // This method is called once with the initial value and again
+                // whenever data at this location is updated.
+
+                emailM=dataSnapshot.getValue(String.class);
 
             }
 
+            @Override
+            public void onCancelled(DatabaseError error) {
+                // Failed to read value
+
+            }
         });
 
         account.setOnClickListener(new View.OnClickListener() {

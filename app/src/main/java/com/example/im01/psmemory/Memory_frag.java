@@ -14,6 +14,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -26,12 +27,12 @@ import android.widget.CalendarView;
 import android.widget.ImageView;
 import android.widget.Spinner;
 
-import android.widget.Toast;
 
-import com.dropbox.client2.DropboxAPI;
-import com.dropbox.client2.android.AndroidAuthSession;
-import com.example.im01.psmemory.Dropbox.DBRoulette;
-import com.example.im01.psmemory.Dropbox.UploadPicture;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -49,7 +50,7 @@ public class Memory_frag extends Fragment {
     private String value = "";
     private Spinner method;
     Button fromfriend,nowtime,next;
-    private DBRoulette myDropboxTool;
+    FirebaseStorage storage = FirebaseStorage.getInstance();
     ArrayAdapter<String> methodlist;
     ImageView imageView;
     private String Dir="/Photos/";
@@ -81,7 +82,8 @@ public class Memory_frag extends Fragment {
         final View root=inflater.inflate(R.layout.activity_memory_frag, container, false);
         imageView = (ImageView)root.findViewById(R.id.imageView2);
         cv=(CalendarView)root.findViewById(R.id.calendarView);
-        myDropboxTool  = new DBRoulette(getActivity());
+
+
         method=(Spinner)root.findViewById(R.id.spinner);
         methodlist = new ArrayAdapter<String>(getActivity(),
                 android.R.layout.simple_spinner_item,methodselect);
@@ -189,7 +191,10 @@ public class Memory_frag extends Fragment {
                // auxFile= new File(realpath);
                 auxFile=new File(Environment.getExternalStorageDirectory(), "image.jpg");
                 Log.e("Path",uri.getPath());
-                myDropboxTool.sentFile(Dir,auxFile);
+
+                //上傳圖片
+
+                //myDropboxTool.sentFile(Dir,auxFile);
                 // 將Bitmap設定到ImageView
 
                 imageView.setImageBitmap(bitmap);
@@ -228,9 +233,43 @@ public class Memory_frag extends Fragment {
 
         // ...
 
-        myDropboxTool.doOnResume();
+      // myDropboxTool.doOnResume();
 
         // ...
+    }
+    public void upload(){
+
+
+        // Create a storage reference from our app
+        StorageReference storageRef = storage.getReferenceFromUrl("gs://<sweltering-torch-4496.appspot.com>");
+        // Create a reference to "mountains.jpg"
+        StorageReference mountainsRef = storageRef.child("mountains.jpg");
+
+        // Create a reference to 'images/mountains.jpg'
+        StorageReference mountainImagesRef = storageRef.child("images/mountains.jpg");
+
+        // While the file names are the same, the references point to different files
+        mountainsRef.getName().equals(mountainImagesRef.getName());    // true
+        mountainsRef.getPath().equals(mountainImagesRef.getPath());    // false
+        Uri file = Uri.fromFile(new File("path/to/images/rivers.jpg"));
+
+        StorageReference riversRef = storageRef.child("images/"+file.getLastPathSegment());
+        UploadTask uploadTask = riversRef.putFile(file);
+
+        // Register observers to listen for when the download is done or if it fails
+        uploadTask.addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+                // Handle unsuccessful uploads
+            }
+        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                // taskSnapshot.getMetadata() contains file metadata such as size, content-type, and download URL.
+                Uri downloadUrl = taskSnapshot.getDownloadUrl();
+            }
+        });
+
     }
 
 

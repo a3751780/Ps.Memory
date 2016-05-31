@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.im01.psmemory">
+    package="com.example.im01.psmemory" >
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -16,13 +16,13 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme" >
         <activity
             android:name=".Welcome"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar"
-            android:windowSoftInputMode="stateAlwaysHidden|adjustResize">
+            android:windowSoftInputMode="stateAlwaysHidden|adjustResize" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -33,11 +33,14 @@
             android:name="com.dropbox.client2.android.AuthActivity"
             android:configChanges="orientation|keyboard"
             android:launchMode="singleTask"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar">
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" >
             <intent-filter>
+
                 <!-- Change this to be db- followed by your app key -->
                 <data android:scheme="db-e8fqg1fie8sirlr" />
+
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.BROWSABLE" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
@@ -70,13 +73,17 @@
             android:name=".PsShow"
             android:label="@string/title_activity_ps_show"
             android:theme="@style/AppTheme.NoActionBar" />
-        <service
-            android:name=".Pm_Service" >
-        </service>
+
+        <service android:name=".Pm_Service" />
+
         <activity
             android:name=".MenberIn"
             android:label="@string/title_activity_menber_in"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".Gmail.SelectFriend"
+            android:label="@string/title_activity_select_friend"
+            android:theme="@style/AppTheme.NoActionBar" />
     </application>
 
 </manifest>

@@ -10,17 +10,18 @@ import java.util.TimeZone;
 
 public class Pm_Service extends Service {
     int count=1;
-    String TAG="Service";
-    boolean isStop=false;
+    String TAG = "Service";
+    boolean isStop = false;
     String time = " ";
     String date = " ";
     String[] Date;
     String[] Time;
-    Ps ps=new Ps();
+    Ps ps = new Ps();
+    int i = 0;
     SimpleDateFormat sf = new SimpleDateFormat("yyyy/MM/dd");
     SimpleDateFormat nowtime = new SimpleDateFormat("HH:mm:ss");
     int nowyear=0,nowmonth=0,nowday=0,nowminute=0,nowhour=0,nowsecond=0;
-    GMailSender sender=new GMailSender("s3751780@gmail.com ","happy0204");
+    GMailSender sender = new GMailSender("s3751780@gmail.com ","happy0204");
     String sendtime;
     int sendtimeI[];
 
@@ -62,15 +63,17 @@ public class Pm_Service extends Service {
                    // Log.e(TAG,ps.sendtimeS[0]);
 
                         //date是現在時間
-                        if(date.equals(ps.sendtimeS[0])){
+                        if(date.equals(ps.sendtimeS[i])){
 
                             try{
-                                sender.sendMail(ps.titleS[0],ps.messageS[0],"s3751780@gmail.com","s3751780@gmail.com");
+                                sender.sendMail(ps.titleS[i],ps.messageS[i],"s3751780@gmail.com","s3751780@gmail.com");
+                                i++;
                             }catch(Exception e){
 
                                 e.printStackTrace();
 
                             }
+
                             break;
 
 

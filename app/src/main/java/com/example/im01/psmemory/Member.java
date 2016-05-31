@@ -7,6 +7,7 @@ public class Member {
     public static String accanswer;
     public static String passworda;
     public static String email;
+    public static String []name=new String[3];
 
 
 }

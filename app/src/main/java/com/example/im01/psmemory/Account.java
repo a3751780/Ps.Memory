@@ -11,12 +11,15 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.firebase.client.Firebase;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class Account extends AppCompatActivity {
 
     EditText account,password,email;
     String accountA,passwordA,emailA;
-    Firebase mfirebase;
+    FirebaseDatabase database = FirebaseDatabase.getInstance();
+    DatabaseReference mfirebase = database.getReference("message");
     Button accept;
     int count=1;
 
@@ -31,7 +34,7 @@ public class Account extends AppCompatActivity {
         email=(EditText)findViewById(R.id.editText9);
         accept=(Button)findViewById(R.id.button8);
 
-        mfirebase=new Firebase("https://sweltering-torch-4496.firebaseio.com/").child("account");
+
 
         accept.setOnClickListener(new View.OnClickListener() {
             @Override
