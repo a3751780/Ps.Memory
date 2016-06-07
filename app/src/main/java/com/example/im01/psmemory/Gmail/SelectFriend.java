@@ -1,5 +1,6 @@
 package com.example.im01.psmemory.Gmail;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -19,14 +20,18 @@ import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class SelectFriend extends AppCompatActivity {
     ListView friendlist;
-    private String[] list={"Tyson","Gino"};
+    String[] list={"Jason","Jacky","Ducker"};
     private ArrayAdapter<String> listAdapter;
     Button accept,cancel;
-
-    Firebase mfirebase;
+    FirebaseDatabase database = FirebaseDatabase.getInstance();
+    DatabaseReference mfirebase = database.getReference("Acount");//抓取table名稱
+    Activity main;
     TextView namef,emailf,sex,phone;
     String memberlist;
     Button back,choice;
@@ -39,7 +44,7 @@ public class SelectFriend extends AppCompatActivity {
         setContentView(R.layout.activity_select_friend);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        mfirebase=new Firebase("https://sweltering-torch-4496.firebaseio.com/");
+        main=this;
         accept=(Button)findViewById(R.id.accept);
         cancel=(Button)findViewById(R.id.cancel);
         friendlist=(ListView)findViewById(R.id.listfriend);
@@ -149,75 +154,80 @@ public class SelectFriend extends AppCompatActivity {
         accept.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i=new Intent();
-                i.setClass(SelectFriend.this,MainActivity.class);
-                startActivity(i);
+                main.finish();
             }
         });
 
         cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i=new Intent();
-                i.setClass(SelectFriend.this,MainActivity.class);
-                startActivity(i);
+               main.finish();
             }
         });
 
     }
     public void findmember(String count){
-        mfirebase.child("account").child("member"+count).child("email").addValueEventListener(new ValueEventListener() {
-
+        mfirebase.child("Member1").child("Friend").child("Friend"+count).child("Name").addValueEventListener(new com.google.firebase.database.ValueEventListener() {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                emailM=String.valueOf(dataSnapshot.getValue());
-                //  name.setText( String.valueOf(dataSnapshot.getValue()));
-
-            }
-            @Override
-            public void onCancelled(FirebaseError firebaseError) {
+            public void onDataChange(com.google.firebase.database.DataSnapshot dataSnapshot) {
+                // This method is called once with the initial value and again
+                // whenever data at this location is updated.
+                nameM = dataSnapshot.getValue(String.class);
 
             }
 
+            @Override
+            public void onCancelled(DatabaseError error) {
+                // Failed to read value
+
+            }
         });
-        mfirebase.child("account").child("member"+count).child("sex").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                sexM=String.valueOf(dataSnapshot.getValue());
-                //  name.setText( String.valueOf(dataSnapshot.getValue()));
 
-            }
+        mfirebase.child("Member1").child("Friend").child("Friend"+count).child("Email").addValueEventListener(new com.google.firebase.database.ValueEventListener() {
             @Override
-            public void onCancelled(FirebaseError firebaseError) {
+            public void onDataChange(com.google.firebase.database.DataSnapshot dataSnapshot) {
+                // This method is called once with the initial value and again
+                // whenever data at this location is updated.
+                emailM = dataSnapshot.getValue(String.class);
 
             }
 
+            @Override
+            public void onCancelled(DatabaseError error) {
+                // Failed to read value
+
+            }
         });
-        mfirebase.child("account").child("member"+count).child("phonenumber").addValueEventListener(new ValueEventListener() {
+        mfirebase.child("Member1").child("Friend").child("Friend"+count).child("Phone").addValueEventListener(new com.google.firebase.database.ValueEventListener() {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                phoneM=String.valueOf(dataSnapshot.getValue());
-                //  name.setText( String.valueOf(dataSnapshot.getValue()));
-
-            }
-            @Override
-            public void onCancelled(FirebaseError firebaseError) {
+            public void onDataChange(com.google.firebase.database.DataSnapshot dataSnapshot) {
+                // This method is called once with the initial value and again
+                // whenever data at this location is updated.
+                phoneM = dataSnapshot.getValue(String.class);
 
             }
 
+            @Override
+            public void onCancelled(DatabaseError error) {
+                // Failed to read value
+                Log.e("E","error");
+
+            }
         });
-        mfirebase.child("account").child("member"+count).child("keyname").addValueEventListener(new ValueEventListener() {
+        mfirebase.child("Member1").child("Friend").child("Friend"+count).child("Sex").addValueEventListener(new com.google.firebase.database.ValueEventListener() {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                nameM=String.valueOf(dataSnapshot.getValue());
-                //  name.setText( String.valueOf(dataSnapshot.getValue()));
-
-            }
-            @Override
-            public void onCancelled(FirebaseError firebaseError) {
+            public void onDataChange(com.google.firebase.database.DataSnapshot dataSnapshot) {
+                // This method is called once with the initial value and again
+                // whenever data at this location is updated.
+                sexM = dataSnapshot.getValue(String.class);
 
             }
 
+            @Override
+            public void onCancelled(DatabaseError error) {
+                // Failed to read value
+
+            }
         });
 
     }

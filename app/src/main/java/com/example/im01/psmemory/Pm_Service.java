@@ -66,7 +66,7 @@ public class Pm_Service extends Service {
                         if(date.equals(ps.sendtimeS[i])){
 
                             try{
-                                sender.sendMail(ps.titleS[i],ps.messageS[i],"s3751780@gmail.com","s3751780@gmail.com");
+                                sender.sendMail(ps.titleS[i],ps.messageS[i],ps.emailS[i],ps.emailS[i]);
                                 i++;
                             }catch(Exception e){
 

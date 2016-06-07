@@ -24,16 +24,25 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CalendarView;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 
+import com.example.im01.psmemory.FireUpload.Main;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -49,15 +58,20 @@ public class Memory_frag extends Fragment {
     private CalendarView cv;
     private String value = "";
     private Spinner method;
+    Fragment main;
     Button fromfriend,nowtime,next;
     FirebaseStorage storage = FirebaseStorage.getInstance();
+    FirebaseDatabase database = FirebaseDatabase.getInstance();
+    DatabaseReference myRef = database.getReference("Acount");
     ArrayAdapter<String> methodlist;
+    EditText who;
     ImageView imageView;
     private String Dir="/Photos/";
-    String methodselect[]={"請選擇要紀念的對象"};
+    String methodselect[]={"請選擇要紀念的Ps","Jason","Skyler","Jacky"};
     Context context;
     File file;
     String[] Date;
+    int selectwho=0;
     int selyear,selmonth,selday;
     int nowyear,nowmonth,nowday;
     Calendar cal = Calendar.getInstance();
@@ -68,39 +82,69 @@ public class Memory_frag extends Fragment {
     public void onAttach(Activity activity) {
         super.onAttach(activity);
 
-        MainActivity mainActivity = (MainActivity)activity;
 
     }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         // TODO Auto-generated method stub
         super.onCreate(savedInstanceState);
 
     }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final View root=inflater.inflate(R.layout.activity_memory_frag, container, false);
+
+
         imageView = (ImageView)root.findViewById(R.id.imageView2);
+
         cv=(CalendarView)root.findViewById(R.id.calendarView);
-
-
+        main=this;
+        who=(EditText) root.findViewById(R.id.editText3);
         method=(Spinner)root.findViewById(R.id.spinner);
         methodlist = new ArrayAdapter<String>(getActivity(),
                 android.R.layout.simple_spinner_item,methodselect);
         method.setAdapter(methodlist);
         nowtime=(Button)root.findViewById(R.id.nowtime);
+
+        cv.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
+            @Override
+            public void onSelectedDayChange(CalendarView view, int year, int month, int dayOfMonth) {
+                selyear=year;selmonth=month;selday=dayOfMonth;
+                System.out.println(selyear);
+                System.out.println(selmonth+1);
+                System.out.println(selday);
+
+            }
+        });
+
         next=(Button)root.findViewById(R.id.button);
+
         next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               /* Intent intent = new Intent();
-                                    intent.setClass(getActivity(),DBRoulette.class);
-                                    startActivity(intent);*/
-                Intent intent=new Intent();
-                intent.setType("image/*");
-                //使用Intent.ACTION_GET_CONTENT這個Action                                            //會開啟選取圖檔視窗讓您選取手機內圖檔
-                intent.setAction(Intent.ACTION_GET_CONTENT);
-                startActivityForResult(intent,1);
+
+
+
+
+              //  uploadfile();
+
+                if(selectwho==1){
+                    myRef.child("Member1").child("Ps").child("Ps1").child("Sendtime").setValue(selyear+"/"+(selmonth+1)+"/"+selday);
+                }
+                else if(selectwho==2){
+                    myRef.child("Member1").child("Ps").child("Ps2").child("Sendtime").setValue(selyear+"/"+(selmonth+1)+"/"+selday);
+                }
+                else if(selectwho==3){
+                    myRef.child("Member1").child("Ps").child("Ps3").child("Sendtime").setValue(selyear+"/"+(selmonth+1)+"/"+selday);
+                }
+
+                Intent i=new Intent();
+                i.setClass(getActivity(),com.example.im01.psmemory.FireUpload.Main.class);
+                startActivity(i);
+
+
             }
         });
 
@@ -114,25 +158,59 @@ public class Memory_frag extends Fragment {
         method.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
                 if(position==0){
-                    System.out.print("nice");
                     Log.e("S","請選擇");
                 }
-                else{
-                    final Dialog set=new Dialog(getActivity());
-                    set.setTitle("想對誰說");
-                    set.setContentView(R.layout.dialog_layout);
-                    set.show();
-                    fromfriend=(Button)set.findViewById(R.id.buttonf);
-                    fromfriend.setOnClickListener(new View.OnClickListener() {
+
+                else if(position==1){
+                    myRef.child("Member1").child("Ps").child("Ps"+position).child("Forwho").addValueEventListener(new ValueEventListener() {
                         @Override
-                        public void onClick(View v) {
-                            Intent i=new Intent();
-                            i.setClass(getActivity(),Friend.class);
-                            startActivity(i);
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            String forwho=String.valueOf(dataSnapshot.getValue());
+                            who.setText(forwho);
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError error) {
+                            // Failed to read value
+
                         }
                     });
-                    set.show();
+                    selectwho=1;
+                }
+
+                else if(position==2){
+                    myRef.child("Member1").child("Ps").child("Ps"+position).child("Forwho").addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            String forwho=String.valueOf(dataSnapshot.getValue());
+                            who.setText(forwho);
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError error) {
+                            // Failed to read value
+
+                        }
+                    });
+                    selectwho=2;
+                }
+                else if(position==3){
+                    myRef.child("Member1").child("Ps").child("Ps"+position).child("Forwho").addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            String forwho=String.valueOf(dataSnapshot.getValue());
+                            who.setText(forwho);
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError error) {
+                            // Failed to read value
+
+                        }
+                    });
+                    selectwho=3;
                 }
 
             }
@@ -142,19 +220,42 @@ public class Memory_frag extends Fragment {
 
             }
         });
-            cv.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
-                @Override
-                public void onSelectedDayChange(CalendarView view, int year, int month, int dayOfMonth) {
-                    selyear=year;selmonth=month;selday=dayOfMonth;
-
-                }
-            });
-
-
-
 
         return  root;
     }
+
+    public void uploadfile(){
+        // Get the data from an ImageView as bytes
+        imageView.setDrawingCacheEnabled(true);
+        imageView.buildDrawingCache();
+        Bitmap bitmap = imageView.getDrawingCache();
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+        byte[] data = baos.toByteArray();
+
+        StorageReference storageRef = storage.getReferenceFromUrl("gs://<project-6390619862189429975.appspot.com>");
+        StorageReference imagesRef = storageRef.child("images");
+        StorageReference spaceRef = storageRef.child("images/space.jpg");
+
+        String fileName = "space.jpg";
+        spaceRef = imagesRef.child(fileName);
+
+        UploadTask uploadTask = spaceRef.putBytes(data);
+        uploadTask.addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+                Toast.makeText(getActivity(),"上傳失敗",Toast.LENGTH_LONG).show();
+            }
+        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                // taskSnapshot.getMetadata() contains file metadata such as size, content-type, and download URL.
+                Uri downloadUrl = taskSnapshot.getDownloadUrl();
+
+            }
+        });
+    }
+
     public void settime(){
         Calendar day=Calendar.getInstance();
 
@@ -204,29 +305,6 @@ public class Memory_frag extends Fragment {
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
-    private String getRealPathFromURI(Uri contentURI) {
-        String result;
-        Cursor cursor = getActivity().getContentResolver().query(contentURI, null, null, null, null);
-        if (cursor == null) { // Source is Dropbox or other similar local file path
-            result = contentURI.getPath();
-        } else {
-            cursor.moveToFirst();
-            int idx = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA);
-            result = cursor.getString(idx);
-            cursor.close();
-        }
-        return result;
-    }
-
-    public void inputstreamtofile(InputStream ins,File file){
-
-    }
-
-    public void GetDateTime(){
-
-
-
-    }
     @Override
     public void onResume() {//Return to your app after user authorization
         super.onResume();
@@ -237,40 +315,13 @@ public class Memory_frag extends Fragment {
 
         // ...
     }
-    public void upload(){
+    @Override
+    public void onPause() {//Return to your app after user authorization
+        super.onPause();
+        main.onDestroy();
 
 
-        // Create a storage reference from our app
-        StorageReference storageRef = storage.getReferenceFromUrl("gs://<sweltering-torch-4496.appspot.com>");
-        // Create a reference to "mountains.jpg"
-        StorageReference mountainsRef = storageRef.child("mountains.jpg");
 
-        // Create a reference to 'images/mountains.jpg'
-        StorageReference mountainImagesRef = storageRef.child("images/mountains.jpg");
-
-        // While the file names are the same, the references point to different files
-        mountainsRef.getName().equals(mountainImagesRef.getName());    // true
-        mountainsRef.getPath().equals(mountainImagesRef.getPath());    // false
-        Uri file = Uri.fromFile(new File("path/to/images/rivers.jpg"));
-
-        StorageReference riversRef = storageRef.child("images/"+file.getLastPathSegment());
-        UploadTask uploadTask = riversRef.putFile(file);
-
-        // Register observers to listen for when the download is done or if it fails
-        uploadTask.addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception exception) {
-                // Handle unsuccessful uploads
-            }
-        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-            @Override
-            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                // taskSnapshot.getMetadata() contains file metadata such as size, content-type, and download URL.
-                Uri downloadUrl = taskSnapshot.getDownloadUrl();
-            }
-        });
-
+        // ...
     }
-
-
 }

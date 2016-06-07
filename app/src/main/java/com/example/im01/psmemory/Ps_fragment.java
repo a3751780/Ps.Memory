@@ -28,12 +28,15 @@ import android.widget.Toast;
 import com.example.im01.psmemory.Gmail.GMailSender;
 import com.example.im01.psmemory.Gmail.SelectFriend;
 import com.firebase.client.Firebase;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.TimeZone;
 
 public class Ps_fragment extends Fragment {
+
     private final static String MSG_RECEIVED = "android.provider.Telephony.SMS_RECEIVED";
     Calendar cal = Calendar.getInstance();
     String dat;
@@ -50,7 +53,8 @@ public class Ps_fragment extends Fragment {
     private Spinner time;
     private String who;
     int selectmail=0,selects=0;
-    Firebase mfirebase;
+    FirebaseDatabase database = FirebaseDatabase.getInstance();
+    DatabaseReference mfirebase = database.getReference("Acount");
     ArrayAdapter<String> methodlist;
     ArrayAdapter<String> timelist;
     String methodselect[]={"選擇你想訴說的方式","簡訊","E-mail","Twitter","其他"};
@@ -72,6 +76,7 @@ public class Ps_fragment extends Fragment {
     GMailSender sender=new GMailSender("s3751780@gmail.com ","happy0204");
     EditText inputtime;
     EditText friendinwho;
+
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
@@ -91,7 +96,7 @@ public class Ps_fragment extends Fragment {
        // bd=getActivity().getIntent().getExtras();
        // mail=bd.getString("mail");
 
-        mfirebase=new Firebase("https://sweltering-torch-4496.firebaseio.com/").child("Ps");
+
         methodlist = new ArrayAdapter<String>(getActivity(),
                 android.R.layout.simple_spinner_item,methodselect);
         method.setAdapter(methodlist);
@@ -149,9 +154,10 @@ public class Ps_fragment extends Fragment {
                            i.setClass(getActivity(), SelectFriend.class);
                            startActivity(i);
                            friendinwho=new EditText(getActivity());
+
                            selectmethod=true;
                            wholayout.addView(friendinwho);
-
+                           friendinwho.setText("text");
                            fromfriend=1;
                            //i.setClass(getActivity(),Friend.class);
                           // startActivity(i);
@@ -168,6 +174,7 @@ public class Ps_fragment extends Fragment {
                    selectmail=1;
                    selfin=(Button)set.findViewById(R.id.button7);
                    friend=(Button)set.findViewById(R.id.buttonf);
+
                    selfin.setOnClickListener(new View.OnClickListener() {
                        @Override
                        public void onClick(View v) {
@@ -189,7 +196,7 @@ public class Ps_fragment extends Fragment {
                            fromfriend=2;
                            wholayout.addView(friendinwho);
                            Intent i=new Intent();
-                           i.setClass(getActivity(),Friend.class);
+                           i.setClass(getActivity(),SelectFriend.class);
                            startActivity(i);
                        }
                    });
@@ -210,7 +217,7 @@ public class Ps_fragment extends Fragment {
             public void onClick(View v) {
 
                 if(selectmethod==false){
-                    Toast.makeText(getActivity(),"還沒選擇訴說方式喔喔",Toast.LENGTH_LONG).show();
+                    Toast.makeText(getActivity(),"還沒選擇訴說方式喔",Toast.LENGTH_LONG).show();
                    // System.out.println(selectmathod);
                 }
                 else if(selectmethod==true){
@@ -274,59 +281,66 @@ public class Ps_fragment extends Fragment {
                             }
                             else {
 
-                                System.out.println("你進來了"+wanttosay.getText().toString()+title.getText().toString()+selfinwho.getText().toString());
                                 if(selectmail==1){
                                     sendtime=Integer.valueOf(inputtime.getText().toString());
-                                    mfirebase.child("Ps"+count).child("message").setValue(wanttosay.getText().toString());
-                                    mfirebase.child("Ps"+count).child("title").setValue(title.getText().toString());
-                                    mfirebase.child("Ps"+count).child("e-mail").setValue(selfinwho.getText().toString());
+                                    mfirebase.child("Member1").child("Ps").child("Ps"+(Ps.pscount+1)).child("Message").setValue(wanttosay.getText().toString());
+                                    mfirebase.child("Member1").child("Ps").child("Ps"+(Ps.pscount+1)).child("Title").setValue(title.getText().toString());
+                                    mfirebase.child("Member1").child("Ps").child("Ps"+(Ps.pscount+1)).child("Email").setValue(selfinwho.getText().toString());
+
                                     if(selecttime==0){
                                         sendday=nowday+sendtime;
-                                        mfirebase.child("Ps"+count).child("sendtime").setValue(nowyear+"/"+nowmonth+"/"+sendday);
+                                        mfirebase.child("Member1").child("Ps").child("Ps"+(Ps.pscount+1)).child("Sendtime").setValue(nowyear+"/"+nowmonth+"/"+sendday);
                                     }else if(selecttime==1){
                                         sendday=nowmonth+sendtime;
-                                        mfirebase.child("Ps"+count).child("sendtime").setValue(nowyear+"/"+sendday+"/"+nowday);
+                                        mfirebase.child("Member1").child("Ps").child("Ps"+(Ps.pscount+1)).child("Sendtime").setValue(nowyear+"/"+sendday+"/"+nowday);
                                     }else if(selecttime==2){
                                         sendday=nowyear+sendtime;
-                                        mfirebase.child("Ps"+count).child("sendtime").setValue(sendday+"/"+nowmonth+"/"+nowday);
+                                        mfirebase.child("Member1").child("Ps").child("Ps"+(Ps.pscount+1)).child("Sendtime").setValue(sendday+"/"+nowmonth+"/"+nowday);
                                     }
 
                                     else{
                                         Toast.makeText(getActivity(),"還沒輸入時間喔",Toast.LENGTH_LONG).show();
 
                                     }
+
+                                    Toast.makeText(getActivity(),"已記下想說的話囉,接下來選擇想紀念的事",Toast.LENGTH_LONG).show();
 
                                     Log.e("主旨",title.getText().toString());
                                     Log.e("訊息",wanttosay.getText().toString());
                                     Log.e("收件人",selfinwho.getText().toString());
                                     Log.e("頻率",inputtime.getText().toString());
-
+                                    System.out.println((Ps.pscount+1));
+                                    Ps.pscount++;
                                     selectmail=0;
                                     acc.dismiss();
                                 }
+
+
                                 else if(selects==1){
                                     sendtime=Integer.valueOf(inputtime.getText().toString());
-                                    mfirebase.child("Ps"+count).child("message").setValue(wanttosay.getText().toString());
-                                    mfirebase.child("Ps"+count).child("title").setValue(title.getText().toString());
-                                    mfirebase.child("Ps"+count).child("phonenumber").setValue(selfinwho.getText().toString());
+                                    mfirebase.child("Member1").child("Ps").child("Ps"+count).child("Message").setValue(wanttosay.getText().toString());
+                                    mfirebase.child("Member1").child("Ps").child("Ps"+count).child("Title").setValue(title.getText().toString());
+                                    mfirebase.child("Member1").child("Ps").child("Ps"+count).child("Phone").setValue(selfinwho.getText().toString());
                                     if(selecttime==0){
                                         sendday=nowday+sendtime;
-                                        mfirebase.child("Ps"+count).child("sendtime").setValue(nowyear+"/"+nowmonth+"/"+sendday);
+                                        mfirebase.child("Member1").child("Ps").child("Ps"+count).child("Sendtime").setValue(nowyear+"/"+nowmonth+"/"+sendday);
                                     }else if(selecttime==1){
                                         sendday=nowmonth+sendtime;
-                                        mfirebase.child("Ps"+count).child("sendtime").setValue(nowyear+"/"+sendday+"/"+nowday);
+                                        mfirebase.child("Member1").child("Ps").child("Ps"+count).child("Sendtime").setValue(nowyear+"/"+sendday+"/"+nowday);
                                     }else if(selecttime==2){
                                         sendday=nowyear+sendtime;
-                                        mfirebase.child("Ps"+count).child("sendtime").setValue(sendday+"/"+nowmonth+"/"+nowday);
+                                        mfirebase.child("Member1").child("Ps").child("Ps"+count).child("Sendtime").setValue(sendday+"/"+nowmonth+"/"+nowday);
                                     }
 
                                     else{
                                         Toast.makeText(getActivity(),"還沒輸入時間喔",Toast.LENGTH_LONG).show();
 
                                     }
+                                    Toast.makeText(getActivity(),"已記下想說的話囉,接下來選擇想紀念的事",Toast.LENGTH_LONG).show();
                                     ActivityCompat.requestPermissions(getActivity(),new String[]{Manifest.permission.SEND_SMS},1);
                                     requestSmsPermission();
                                     send();
+                                    System.out.println(count);
                                     selects=0;
                                     acc.dismiss();
                                 }
@@ -335,54 +349,57 @@ public class Ps_fragment extends Fragment {
                                     requestSmsPermission();
                                     friendinwho.setText(mail);
                                     sendtime=Integer.valueOf(inputtime.getText().toString());
-                                    mfirebase.child("Ps"+count).child("message").setValue(wanttosay.getText().toString());
-                                    mfirebase.child("Ps"+count).child("title").setValue(title.getText().toString());
-                                    mfirebase.child("Ps"+count).child("phonenumber").setValue(friendinwho.getText().toString());
+                                    mfirebase.child("Member1").child("Ps").child("Ps"+count).child("Message").setValue(wanttosay.getText().toString());
+                                    mfirebase.child("Member1").child("Ps").child("Ps"+count).child("Title").setValue(title.getText().toString());
+                                    mfirebase.child("Member1").child("Ps").child("Ps"+count).child("Phone").setValue(friendinwho.getText().toString());
                                     if(selecttime==0){
                                         sendday=nowday+sendtime;
-                                        mfirebase.child("Ps"+count).child("sendtime").setValue(nowyear+"/"+nowmonth+"/"+sendday);
+                                        mfirebase.child("Member1").child("Ps").child("Ps"+count).child("Sendtime").setValue(nowyear+"/"+nowmonth+"/"+sendday);
                                     }else if(selecttime==1){
                                         sendday=nowmonth+sendtime;
-                                        mfirebase.child("Ps"+count).child("sendtime").setValue(nowyear+"/"+sendday+"/"+nowday);
+                                        mfirebase.child("Member1").child("Ps").child("Ps"+count).child("Sendtime").setValue(nowyear+"/"+sendday+"/"+nowday);
                                     }else if(selecttime==2){
                                         sendday=nowyear+sendtime;
-                                        mfirebase.child("Ps"+count).child("sendtime").setValue(sendday+"/"+nowmonth+"/"+nowday);
+                                        mfirebase.child("Member1").child("Ps").child("Ps"+count).child("Sendtime").setValue(sendday+"/"+nowmonth+"/"+nowday);
                                     }
 
                                     else{
                                         Toast.makeText(getActivity(),"還沒輸入時間喔",Toast.LENGTH_LONG).show();
 
                                     }
+                                    Toast.makeText(getActivity(),"已記下想說的話囉,接下來選擇想紀念的事",Toast.LENGTH_LONG).show();
                                     send();
+                                    System.out.println(count);
                                     fromfriend=0;
                                     acc.dismiss();
 
                                 }else if(fromfriend==2){
                                     sendtime=Integer.valueOf(inputtime.getText().toString());
                                     friendinwho.setText(mail);
-                                    mfirebase.child("Ps"+count).child("message").setValue(wanttosay.getText().toString());
-                                    mfirebase.child("Ps"+count).child("title").setValue(title.getText().toString());
-                                    mfirebase.child("Ps"+count).child("e-mail").setValue(mail);
+                                    mfirebase.child("Member1").child("Ps").child("Ps"+count).child("Message").setValue(wanttosay.getText().toString());
+                                    mfirebase.child("Member1").child("Ps").child("Ps"+count).child("Title").setValue(title.getText().toString());
+                                    mfirebase.child("Member1").child("Ps").child("Ps"+count).child("Email").setValue(mail);
 
                                     if(selecttime==0){
                                         sendday=nowday+sendtime;
-                                        mfirebase.child("Ps"+count).child("sendtime").setValue(nowyear+"/"+nowmonth+"/"+sendday);
+                                        mfirebase.child("Member1").child("Ps").child("Ps"+count).child("Sendtime").setValue(nowyear+"/"+nowmonth+"/"+sendday);
                                     }else if(selecttime==1){
                                         sendday=nowmonth+sendtime;
-                                        mfirebase.child("Ps"+count).child("sendtime").setValue(nowyear+"/"+sendday+"/"+nowday);
+                                        mfirebase.child("Member1").child("Ps").child("Ps"+count).child("Sendtime").setValue(nowyear+"/"+sendday+"/"+nowday);
                                     }else if(selecttime==2){
                                         sendday=nowyear+sendtime;
-                                        mfirebase.child("Ps"+count).child("sendtime").setValue(sendday+"/"+nowmonth+"/"+nowday);
+                                        mfirebase.child("Member1").child("Ps").child("Ps"+count).child("Sendtime").setValue(sendday+"/"+nowmonth+"/"+nowday);
                                     }
                                     else{
                                         Toast.makeText(getActivity(),"還沒輸入時間喔",Toast.LENGTH_LONG).show();
 
                                     }
-
+                                    Toast.makeText(getActivity(),"已記下想說的話囉,接下來選擇想紀念的事",Toast.LENGTH_LONG).show();
                                     Log.e("主旨",title.getText().toString());
                                     Log.e("訊息",wanttosay.getText().toString());
                                     Log.e("收件人",mail);
                                     Log.e("頻率",inputtime.getText().toString());
+                                    System.out.println(count);
                                     fromfriend=0;
                                     acc.dismiss();
                                 }

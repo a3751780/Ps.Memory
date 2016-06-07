@@ -8,4 +8,5 @@ package com.example.im01.psmemory;
          public static String emailS[]=new String[3];
          public static String numberS[]=new String[3];
          public static String messageS[]=new String[3];
+         public static int pscount=0;
  }

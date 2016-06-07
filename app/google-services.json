@@ -1,27 +1,27 @@
 {
   "project_info": {
-    "project_number": "1066923571597",
-    "firebase_url": "https://sweltering-torch-4496.firebaseio.com",
-    "project_id": "sweltering-torch-4496",
-    "storage_bucket": "sweltering-torch-4496.appspot.com"
+    "project_number": "387657944532",
+    "firebase_url": "https://project-6390619862189429975.firebaseio.com",
+    "project_id": "project-6390619862189429975",
+    "storage_bucket": "project-6390619862189429975.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:1066923571597:android:e1cc85f08a8b1006",
+        "mobilesdk_app_id": "1:387657944532:android:e1cc85f08a8b1006",
         "android_client_info": {
           "package_name": "com.example.im01.psmemory"
         }
       },
       "oauth_client": [
         {
-          "client_id": "1066923571597-3s0afcsv5hij1h7flnu2gguekh13oh76.apps.googleusercontent.com",
+          "client_id": "387657944532-475qec6cj1buvnu7q9255lfo53loito1.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyC2VEpdwq2b73LGMFk0I7DLquxNl5RKGJw"
+          "current_key": "AIzaSyArn0aCpmXPHShGjMfWuJ9rpC3drpL6nQ4"
         }
       ],
       "services": {

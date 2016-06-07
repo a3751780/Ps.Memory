@@ -40,7 +40,7 @@ public class MainActivity extends ActionBarActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         Service();
-
+        System.out.println("this is"+Ps.pscount);
         tabHost= (FragmentTabHost) findViewById(android.R.id.tabhost);
         tabHost.setup(this, getSupportFragmentManager(), R.id.realtabcontent);
         // Here, thisActivity is the current activity

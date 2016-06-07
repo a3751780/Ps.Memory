@@ -12,48 +12,115 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
+import com.firebase.client.Firebase;
+import com.firebase.client.FirebaseError;
+import com.firebase.ui.database.FirebaseListAdapter;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.StreamDownloadTask;
 
-public class Friend extends AppCompatActivity {
+import java.util.ArrayList;
+
+public class Friend extends AppCompatActivity
+        {
     Button accept,cancel;
     ListView friendlist;
     FirebaseDatabase database = FirebaseDatabase.getInstance();
-    DatabaseReference myRef = database.getReference("account");
+    DatabaseReference myRef = database.getReference("Acount");//抓取table名稱
+    Firebase myfire=new Firebase("https://project-6390619862189429975.firebaseio.com/Acount/Member1/Friend/");
     TextView namef,emailf,sex,phone;
     String memberlist;
     Button back,choice;
     String count;
     String emailM,nameM,sexM,phoneM;
     //String count="0";
-    String[] list={"Tyson","Gino"};
-    private ArrayAdapter<String> listAdapter;
+   // String[] list={"Jason","Jacky","Ducker"};
+    ArrayList<String> items=new ArrayList<>();
+    ArrayAdapter<String> adapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_friend);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
+        myfire.setAndroidContext(this);
 
         accept=(Button)findViewById(R.id.button11);
         cancel=(Button)findViewById(R.id.button12);
         friendlist=(ListView)findViewById(R.id.listView);
         //設定listview值
-        int countlist=1;
-        for(int i = 0 ; i < 3 ; i++){
-            findname(countlist);
-           // list[i]="";
-            countlist++;
-        }
+        adapter=new ArrayAdapter<String>(this,
+                android.R.layout.simple_list_item_1,
+                android.R.id.text1);
+        myfire.addChildEventListener(new com.firebase.client.ChildEventListener() {
+            @Override
+            public void onChildAdded(com.firebase.client.DataSnapshot dataSnapshot, String s) {
+                adapter.add(
+                        (String) dataSnapshot.child("Name").getValue());
+            }
 
-        listAdapter = new ArrayAdapter(this,android.R.layout.simple_list_item_1,list);
-        friendlist.setAdapter(listAdapter);
+            @Override
+            public void onChildChanged(com.firebase.client.DataSnapshot dataSnapshot, String s) {
+                adapter.remove(
+                        (String) dataSnapshot.child("Name").getValue());
+            }
+
+            @Override
+            public void onChildRemoved(com.firebase.client.DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(com.firebase.client.DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+
+            }
+        });
+
+
+       /* myRef.child("1").addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                adapter.add(
+                        (String) dataSnapshot.getValue());
+                System.out.println( "I'm "+(String) dataSnapshot.getValue());
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+                adapter.remove(
+                        (String) dataSnapshot.getValue());
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });*/
+
+        friendlist.setAdapter(adapter);
 
         //設定listview監聽
         friendlist.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -65,7 +132,7 @@ public class Friend extends AppCompatActivity {
                 count="1";
 
                 Log.e("COUNT",count);
-
+                findmember(count);
                 if(count.equals("1")){
 
                     final Dialog set=new Dialog(Friend.this);
@@ -75,13 +142,16 @@ public class Friend extends AppCompatActivity {
                     emailf=(TextView)set.findViewById(R.id.emailf);
                     sex=(TextView)set.findViewById(R.id.sex);
                     phone=(TextView)set.findViewById(R.id.phone);
-                    findmember(count);
+
                     back=(Button)set.findViewById(R.id.button16);
 
                     namef.setText(nameM);
                     emailf.setText(emailM);
                     sex.setText(sexM);
                     phone.setText(phoneM);
+
+
+
 
                     back.setOnClickListener(new View.OnClickListener() {
                         @Override
@@ -114,6 +184,7 @@ public class Friend extends AppCompatActivity {
                 count="2";
 
                 Log.e("COUNT",count);
+                findmember(count);
                 if(count.equals("2")){
 
                     final Dialog set=new Dialog(Friend.this);
@@ -123,7 +194,7 @@ public class Friend extends AppCompatActivity {
                     emailf=(TextView)set.findViewById(R.id.emailf);
                     sex=(TextView)set.findViewById(R.id.sex);
                     phone=(TextView)set.findViewById(R.id.phone);
-                    findmember(count);
+
                     back=(Button)set.findViewById(R.id.button16);
                     namef.setText(nameM);
                     emailf.setText(emailM);
@@ -175,12 +246,10 @@ public class Friend extends AppCompatActivity {
             }
         });
 
-
-
     }
 
     public void findmember(String count){
-        myRef.child("member"+count).child("keyname").addValueEventListener(new ValueEventListener() {
+        myRef.child("Member1").child("Friend").child("Friend"+count).child("Name").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 // This method is called once with the initial value and again
@@ -196,7 +265,7 @@ public class Friend extends AppCompatActivity {
             }
         });
 
-        myRef.child("member"+count).child("email").addValueEventListener(new ValueEventListener() {
+        myRef.child("Member1").child("Friend").child("Friend"+count).child("Email").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 // This method is called once with the initial value and again
@@ -211,7 +280,7 @@ public class Friend extends AppCompatActivity {
 
             }
         });
-        myRef.child("member"+count).child("phonenumber").addValueEventListener(new ValueEventListener() {
+        myRef.child("Member1").child("Friend").child("Friend"+count).child("Phone").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 // This method is called once with the initial value and again
@@ -227,7 +296,7 @@ public class Friend extends AppCompatActivity {
 
             }
         });
-        myRef.child("member"+count).child("sex").addValueEventListener(new ValueEventListener() {
+        myRef.child("Member1").child("Friend").child("Friend"+count).child("Sex").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 // This method is called once with the initial value and again
@@ -244,22 +313,11 @@ public class Friend extends AppCompatActivity {
         });
 
     }
-    public void findname(int count){
-        myRef.child("member"+count).child("keyname").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                // This method is called once with the initial value and again
-                // whenever data at this location is updated.
-                nameM = dataSnapshot.getValue(String.class);
 
-            }
 
-            @Override
-            public void onCancelled(DatabaseError error) {
-                // Failed to read value
-
-            }
-        });
+    @Override
+    protected void onStart(){
+            super.onStart();
 
     }
 
