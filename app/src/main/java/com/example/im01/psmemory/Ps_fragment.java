@@ -283,19 +283,19 @@ public class Ps_fragment extends Fragment {
 
                                 if(selectmail==1){
                                     sendtime=Integer.valueOf(inputtime.getText().toString());
-                                    mfirebase.child("Member1").child("Ps").child("Ps"+(Ps.pscount+1)).child("Message").setValue(wanttosay.getText().toString());
-                                    mfirebase.child("Member1").child("Ps").child("Ps"+(Ps.pscount+1)).child("Title").setValue(title.getText().toString());
-                                    mfirebase.child("Member1").child("Ps").child("Ps"+(Ps.pscount+1)).child("Email").setValue(selfinwho.getText().toString());
+                                    mfirebase.child("Member1").child("Ps").child(title.getText().toString()).child("Message").setValue(wanttosay.getText().toString());
+                                    mfirebase.child("Member1").child("Ps").child(title.getText().toString()).child("Title").setValue(title.getText().toString());
+                                    mfirebase.child("Member1").child("Ps").child(title.getText().toString()).child("Email").setValue(selfinwho.getText().toString());
 
                                     if(selecttime==0){
                                         sendday=nowday+sendtime;
-                                        mfirebase.child("Member1").child("Ps").child("Ps"+(Ps.pscount+1)).child("Sendtime").setValue(nowyear+"/"+nowmonth+"/"+sendday);
+                                        mfirebase.child("Member1").child("Ps").child(title.getText().toString()).child("Sendtime").setValue(nowyear+"/"+nowmonth+"/"+sendday);
                                     }else if(selecttime==1){
                                         sendday=nowmonth+sendtime;
-                                        mfirebase.child("Member1").child("Ps").child("Ps"+(Ps.pscount+1)).child("Sendtime").setValue(nowyear+"/"+sendday+"/"+nowday);
+                                        mfirebase.child("Member1").child("Ps").child(title.getText().toString()).child("Sendtime").setValue(nowyear+"/"+sendday+"/"+nowday);
                                     }else if(selecttime==2){
                                         sendday=nowyear+sendtime;
-                                        mfirebase.child("Member1").child("Ps").child("Ps"+(Ps.pscount+1)).child("Sendtime").setValue(sendday+"/"+nowmonth+"/"+nowday);
+                                        mfirebase.child("Member1").child("Ps").child(title.getText().toString()).child("Sendtime").setValue(sendday+"/"+nowmonth+"/"+nowday);
                                     }
 
                                     else{
@@ -318,18 +318,18 @@ public class Ps_fragment extends Fragment {
 
                                 else if(selects==1){
                                     sendtime=Integer.valueOf(inputtime.getText().toString());
-                                    mfirebase.child("Member1").child("Ps").child("Ps"+count).child("Message").setValue(wanttosay.getText().toString());
-                                    mfirebase.child("Member1").child("Ps").child("Ps"+count).child("Title").setValue(title.getText().toString());
-                                    mfirebase.child("Member1").child("Ps").child("Ps"+count).child("Phone").setValue(selfinwho.getText().toString());
+                                    mfirebase.child("Member1").child("Ps").child(title.getText().toString()).child("Message").setValue(wanttosay.getText().toString());
+                                    mfirebase.child("Member1").child("Ps").child(title.getText().toString()).child("Title").setValue(title.getText().toString());
+                                    mfirebase.child("Member1").child("Ps").child(title.getText().toString()).child("Phone").setValue(selfinwho.getText().toString());
                                     if(selecttime==0){
                                         sendday=nowday+sendtime;
-                                        mfirebase.child("Member1").child("Ps").child("Ps"+count).child("Sendtime").setValue(nowyear+"/"+nowmonth+"/"+sendday);
+                                        mfirebase.child("Member1").child("Ps").child(title.getText().toString()).child("Sendtime").setValue(nowyear+"/"+nowmonth+"/"+sendday);
                                     }else if(selecttime==1){
                                         sendday=nowmonth+sendtime;
-                                        mfirebase.child("Member1").child("Ps").child("Ps"+count).child("Sendtime").setValue(nowyear+"/"+sendday+"/"+nowday);
+                                        mfirebase.child("Member1").child("Ps").child(title.getText().toString()).child("Sendtime").setValue(nowyear+"/"+sendday+"/"+nowday);
                                     }else if(selecttime==2){
                                         sendday=nowyear+sendtime;
-                                        mfirebase.child("Member1").child("Ps").child("Ps"+count).child("Sendtime").setValue(sendday+"/"+nowmonth+"/"+nowday);
+                                        mfirebase.child("Member1").child("Ps").child(title.getText().toString()).child("Sendtime").setValue(sendday+"/"+nowmonth+"/"+nowday);
                                     }
 
                                     else{
@@ -349,18 +349,18 @@ public class Ps_fragment extends Fragment {
                                     requestSmsPermission();
                                     friendinwho.setText(mail);
                                     sendtime=Integer.valueOf(inputtime.getText().toString());
-                                    mfirebase.child("Member1").child("Ps").child("Ps"+count).child("Message").setValue(wanttosay.getText().toString());
-                                    mfirebase.child("Member1").child("Ps").child("Ps"+count).child("Title").setValue(title.getText().toString());
-                                    mfirebase.child("Member1").child("Ps").child("Ps"+count).child("Phone").setValue(friendinwho.getText().toString());
+                                    mfirebase.child("Member1").child("Ps").child(title.getText().toString()).child("Message").setValue(wanttosay.getText().toString());
+                                    mfirebase.child("Member1").child("Ps").child(title.getText().toString()).child("Title").setValue(title.getText().toString());
+                                    mfirebase.child("Member1").child("Ps").child(title.getText().toString()).child("Phone").setValue(friendinwho.getText().toString());
                                     if(selecttime==0){
                                         sendday=nowday+sendtime;
-                                        mfirebase.child("Member1").child("Ps").child("Ps"+count).child("Sendtime").setValue(nowyear+"/"+nowmonth+"/"+sendday);
+                                        mfirebase.child("Member1").child("Ps").child(title.getText().toString()).child("Sendtime").setValue(nowyear+"/"+nowmonth+"/"+sendday);
                                     }else if(selecttime==1){
                                         sendday=nowmonth+sendtime;
-                                        mfirebase.child("Member1").child("Ps").child("Ps"+count).child("Sendtime").setValue(nowyear+"/"+sendday+"/"+nowday);
+                                        mfirebase.child("Member1").child("Ps").child(title.getText().toString()).child("Sendtime").setValue(nowyear+"/"+sendday+"/"+nowday);
                                     }else if(selecttime==2){
                                         sendday=nowyear+sendtime;
-                                        mfirebase.child("Member1").child("Ps").child("Ps"+count).child("Sendtime").setValue(sendday+"/"+nowmonth+"/"+nowday);
+                                        mfirebase.child("Member1").child("Ps").child(title.getText().toString()).child("Sendtime").setValue(sendday+"/"+nowmonth+"/"+nowday);
                                     }
 
                                     else{
@@ -376,19 +376,19 @@ public class Ps_fragment extends Fragment {
                                 }else if(fromfriend==2){
                                     sendtime=Integer.valueOf(inputtime.getText().toString());
                                     friendinwho.setText(mail);
-                                    mfirebase.child("Member1").child("Ps").child("Ps"+count).child("Message").setValue(wanttosay.getText().toString());
-                                    mfirebase.child("Member1").child("Ps").child("Ps"+count).child("Title").setValue(title.getText().toString());
-                                    mfirebase.child("Member1").child("Ps").child("Ps"+count).child("Email").setValue(mail);
+                                    mfirebase.child("Member1").child("Ps").child(title.getText().toString()).child("Message").setValue(wanttosay.getText().toString());
+                                    mfirebase.child("Member1").child("Ps").child(title.getText().toString()).child("Title").setValue(title.getText().toString());
+                                    mfirebase.child("Member1").child("Ps").child(title.getText().toString()).child("Email").setValue(mail);
 
                                     if(selecttime==0){
                                         sendday=nowday+sendtime;
-                                        mfirebase.child("Member1").child("Ps").child("Ps"+count).child("Sendtime").setValue(nowyear+"/"+nowmonth+"/"+sendday);
+                                        mfirebase.child("Member1").child("Ps").child(title.getText().toString()).child("Sendtime").setValue(nowyear+"/"+nowmonth+"/"+sendday);
                                     }else if(selecttime==1){
                                         sendday=nowmonth+sendtime;
-                                        mfirebase.child("Member1").child("Ps").child("Ps"+count).child("Sendtime").setValue(nowyear+"/"+sendday+"/"+nowday);
+                                        mfirebase.child("Member1").child("Ps").child(title.getText().toString()).child("Sendtime").setValue(nowyear+"/"+sendday+"/"+nowday);
                                     }else if(selecttime==2){
                                         sendday=nowyear+sendtime;
-                                        mfirebase.child("Member1").child("Ps").child("Ps"+count).child("Sendtime").setValue(sendday+"/"+nowmonth+"/"+nowday);
+                                        mfirebase.child("Member1").child("Ps").child(title.getText().toString()).child("Sendtime").setValue(sendday+"/"+nowmonth+"/"+nowday);
                                     }
                                     else{
                                         Toast.makeText(getActivity(),"還沒輸入時間喔",Toast.LENGTH_LONG).show();

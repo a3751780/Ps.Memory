@@ -51,7 +51,7 @@ import java.io.OutputStream;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.TimeZone;
+
 
 
 public class Memory_frag extends Fragment {
@@ -124,8 +124,6 @@ public class Memory_frag extends Fragment {
         next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-
 
 
               //  uploadfile();
@@ -223,7 +221,7 @@ public class Memory_frag extends Fragment {
 
         return  root;
     }
-
+    //firebase storage
     public void uploadfile(){
         // Get the data from an ImageView as bytes
         imageView.setDrawingCacheEnabled(true);
@@ -277,12 +275,10 @@ public class Memory_frag extends Fragment {
            /// Uri uri = data.getData();
             Uri uri;
             uri = data.getData();
-            File auxFile ;
+            File auxFile;
             String realpath;
-
-
             ContentResolver cr = getActivity().getContentResolver();
-            ContentResolver ch =getActivity().getContentResolver();
+
 
            // InputStream is=ch.openInputStream(uri);
             try {
@@ -292,11 +288,6 @@ public class Memory_frag extends Fragment {
                // auxFile= new File(realpath);
                 auxFile=new File(Environment.getExternalStorageDirectory(), "image.jpg");
                 Log.e("Path",uri.getPath());
-
-                //上傳圖片
-
-                //myDropboxTool.sentFile(Dir,auxFile);
-                // 將Bitmap設定到ImageView
 
                 imageView.setImageBitmap(bitmap);
             } catch (FileNotFoundException e) {
@@ -309,19 +300,10 @@ public class Memory_frag extends Fragment {
     public void onResume() {//Return to your app after user authorization
         super.onResume();
 
-        // ...
-
-      // myDropboxTool.doOnResume();
-
-        // ...
     }
     @Override
     public void onPause() {//Return to your app after user authorization
         super.onPause();
         main.onDestroy();
-
-
-
-        // ...
     }
 }

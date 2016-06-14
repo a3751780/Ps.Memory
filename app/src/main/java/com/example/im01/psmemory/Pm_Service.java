@@ -61,7 +61,7 @@ public class Pm_Service extends Service {
                     nowsecond = Integer.valueOf(Time[2]);
                     Log.e(TAG,date);
                    // Log.e(TAG,ps.sendtimeS[0]);
-
+                    System.out.println(ps.sendtimeS[0]);
                         //date是現在時間
                         if(date.equals(ps.sendtimeS[i])){
 

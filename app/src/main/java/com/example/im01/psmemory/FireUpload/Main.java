@@ -2,10 +2,14 @@ package com.example.im01.psmemory.FireUpload;
 
 
 import android.Manifest;
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -32,6 +36,7 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
@@ -56,6 +61,7 @@ public class Main extends AppCompatActivity implements
 
     private Uri mDownloadUrl = null;
     private Uri mFileUri = null;
+    private Uri myFileUri = null;
     private Button fromlocal;
     // [START declare_ref]
     private StorageReference mStorageRef;
@@ -89,6 +95,7 @@ public class Main extends AppCompatActivity implements
                 startActivityForResult(intent,1);
             }
         });
+
         // Restore instance state
         if (savedInstanceState != null) {
             mFileUri = savedInstanceState.getParcelable(KEY_FILE_URI);
@@ -151,10 +158,36 @@ public class Main extends AppCompatActivity implements
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         Log.d(TAG, "onActivityResult:" + requestCode + ":" + resultCode + ":" + data);
 
+        if (resultCode == Activity.RESULT_OK) {
+            //取得圖檔的路徑位置
+
+            Uri uri;
+            uri = data.getData();
+            File auxFile;
+            String realpath;
+            ContentResolver cr = this.getContentResolver();
+            // InputStream is=ch.openInputStream(uri);
+            try {
+                //由抽象資料接口轉換圖檔路徑為Bitmap
+                Bitmap bitmap = BitmapFactory.decodeStream(cr.openInputStream(uri));
+                // auxFile= new File(realpath);
+                auxFile=new File(Environment.getExternalStorageDirectory(), "image.jpg");
+                Log.e("Path",uri.getPath());
+                myFileUri=uri;
+                uploadFromUri(myFileUri);
+            } catch (FileNotFoundException e) {
+                Log.e("Exception", e.getMessage(),e);
+            }
+        }
+        super.onActivityResult(requestCode, resultCode, data);
+
+//-----------------------------------------------------------------------------------------------
+
         if (requestCode == RC_TAKE_PICTURE) {
             if (resultCode == RESULT_OK) {
                 if (mFileUri != null) {
                     uploadFromUri(mFileUri);
+
                 } else {
                     Log.w(TAG, "File URI is null");
                 }
@@ -163,14 +196,9 @@ public class Main extends AppCompatActivity implements
             }
         }
 
-
-
-
-
-
     }
 
-    // [START upload_from_uri]
+    // [START upload_from_uri] 上傳
     private void uploadFromUri(Uri fileUri) {
         Log.d(TAG, "uploadFromUri:src:" + fileUri.toString());
 
@@ -184,7 +212,9 @@ public class Main extends AppCompatActivity implements
         // [START_EXCLUDE]
         showProgressDialog();
         // [END_EXCLUDE]
+
         Log.d(TAG, "uploadFromUri:dst:" + photoRef.getPath());
+
         photoRef.putFile(fileUri)
                 .addOnSuccessListener(this, new OnSuccessListener<UploadTask.TaskSnapshot>() {
                     @Override

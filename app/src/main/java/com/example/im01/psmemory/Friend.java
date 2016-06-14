@@ -3,6 +3,8 @@ package com.example.im01.psmemory;
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -10,6 +12,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -37,9 +40,10 @@ public class Friend extends AppCompatActivity
     Firebase myfire=new Firebase("https://project-6390619862189429975.firebaseio.com/Acount/Member1/Friend/");
     TextView namef,emailf,sex,phone;
     String memberlist;
-    Button back,choice;
+    Button back,choice,ok,can;
     String count;
     String emailM,nameM,sexM,phoneM;
+            EditText nameA,sexA,emailA,phoneA;
     //String count="0";
    // String[] list={"Jason","Jacky","Ducker"};
     ArrayList<String> items=new ArrayList<>();
@@ -245,7 +249,43 @@ public class Friend extends AppCompatActivity
                 startActivity(i);
             }
         });
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
 
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                final Dialog set=new Dialog(Friend.this);
+                set.setContentView(R.layout.add_friend);
+                set.show();
+                ok=(Button)set.findViewById(R.id.select);
+                can=(Button)set.findViewById(R.id.cancel);
+
+                nameA=(EditText)set.findViewById(R.id.editText13);
+                sexA=(EditText)set.findViewById(R.id.editText11);
+                emailA=(EditText)set.findViewById(R.id.editText12);
+                phoneA=(EditText)set.findViewById(R.id.editText10);
+
+                can.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        set.dismiss();
+                    }
+                });
+
+                ok.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        myRef.child("Member1").child("Friend").child(nameA.getText().toString()).child("Name").setValue(nameA.getText().toString());
+                        myRef.child("Member1").child("Friend").child(nameA.getText().toString()).child("Sex").setValue(sexA.getText().toString());
+                        myRef.child("Member1").child("Friend").child(nameA.getText().toString()).child("E-mail").setValue(emailA.getText().toString());
+                        myRef.child("Member1").child("Friend").child(nameA.getText().toString()).child("Phone").setValue(phoneA.getText().toString());
+                        set.dismiss();
+                    }
+                });
+
+            }
+        });
     }
 
     public void findmember(String count){

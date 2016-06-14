@@ -240,10 +240,6 @@ public class MainSelect extends AppCompatActivity {
         });
             Ps.pscount++;
     }
-    public void Service(){
-        Intent i=new Intent(this,Pm_Service.class);
 
-        startService(i);
-    }
 
 }
