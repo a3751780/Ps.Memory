@@ -78,7 +78,16 @@
     android:layout_alignParentStart="true">
 </LinearLayout>
 
-
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="textPersonName"
+        android:ems="10"
+        android:id="@+id/wantname"
+        android:layout_below="@+id/editText5"
+        android:layout_toRightOf="@+id/whoed"
+        android:layout_toEndOf="@+id/whoed"
+        android:hint="想紀念的名字" />
 
 
 </RelativeLayout>

@@ -61,9 +61,11 @@ public class Friend extends AppCompatActivity
         cancel=(Button)findViewById(R.id.button12);
         friendlist=(ListView)findViewById(R.id.listView);
         //設定listview值
+
         adapter=new ArrayAdapter<String>(this,
                 android.R.layout.simple_list_item_1,
                 android.R.id.text1);
+
         myfire.addChildEventListener(new com.firebase.client.ChildEventListener() {
             @Override
             public void onChildAdded(com.firebase.client.DataSnapshot dataSnapshot, String s) {
@@ -153,9 +155,6 @@ public class Friend extends AppCompatActivity
                     emailf.setText(emailM);
                     sex.setText(sexM);
                     phone.setText(phoneM);
-
-
-
 
                     back.setOnClickListener(new View.OnClickListener() {
                         @Override

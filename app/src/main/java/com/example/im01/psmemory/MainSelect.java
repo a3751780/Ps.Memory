@@ -56,9 +56,9 @@ public class MainSelect extends AppCompatActivity {
                         public void onDataChange(com.google.firebase.database.DataSnapshot dataSnapshot) {
                             // This method is called once with the initial value and again
                             // whenever data at this location is updated.
-                            selecttime[count]=String.valueOf(dataSnapshot.getValue());
-                            System.out.println(count);
-                            System.out.println(selecttime[count]);
+                           // selecttime[count]=String.valueOf(dataSnapshot.getValue());
+                         //   System.out.println(count);
+                          //  System.out.println(selecttime[count]);
 
                             count++;
 
@@ -142,7 +142,7 @@ public class MainSelect extends AppCompatActivity {
         });
 
     }
-    public void Firebasestart()throws ArrayIndexOutOfBoundsException{
+    public void Firebasestart() throws ArrayIndexOutOfBoundsException {
 
         mfirebaseA.child("Member"+i).child("keyname").addValueEventListener(new ValueEventListener() {
             @Override

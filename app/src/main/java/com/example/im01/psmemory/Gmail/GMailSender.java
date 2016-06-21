@@ -2,6 +2,7 @@ package com.example.im01.psmemory.Gmail;
 
 import javax.activation.DataHandler;
 import javax.activation.DataSource;
+import javax.activation.FileDataSource;
 import javax.mail.Message;
 import javax.mail.Multipart;
 import javax.mail.PasswordAuthentication;
@@ -14,6 +15,7 @@ import javax.mail.internet.MimeMultipart;
 
 
 import java.io.ByteArrayInputStream;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -76,12 +78,36 @@ public class GMailSender extends javax.mail.Authenticator
         messageBodyPart.setDataHandler(new DataHandler(new ByteArrayDataSource(body.getBytes(), "text/html")));
         multipart.addBodyPart(messageBodyPart);
 
-
         // Put parts in message
         message.setContent(multipart);
 
         // Send the message.
         Transport.send(message);
+
+        //pictrue send
+        // create multipart
+        Multipart multipartP = new MimeMultipart();
+
+        // create bodypart with image and set content-id
+        MimeBodyPart messageBodyPartP = new MimeBodyPart();
+        File testImage = new File("/storage/emulated/0/Download/", "test.png"); //手機檔案位置,檔案名稱
+        DataSource source = new FileDataSource(testImage);
+        messageBodyPartP.setDataHandler(new DataHandler(source));
+        messageBodyPartP.setFileName("image.png");
+        messageBodyPartP.setDisposition(MimeBodyPart.INLINE);
+        messageBodyPartP.setHeader("Content-ID","<vogue>");
+        multipartP.addBodyPart(messageBodyPart);
+        // create bodypart with html content and reference to the content-id
+        messageBodyPartP = new MimeBodyPart();
+        String htmlText = "<img src=\"cid:vogue\">";
+        messageBodyPartP.setContent(htmlText, "text/html");
+        multipartP.addBodyPart(messageBodyPart);
+
+        // add multipart to message
+        message.setContent(multipartP);
+
+
+
     }
 
     public class ByteArrayDataSource implements DataSource

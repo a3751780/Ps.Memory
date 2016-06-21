@@ -64,12 +64,11 @@ public class Ps_fragment extends Fragment {
     Button accept,selfin,friend;
     Button acceptd;
     LinearLayout wholayout;
-    EditText selfinwho;
+    EditText selfinwho,wantname;
     String titleF,message,emailF;
     String phone;
     String[] Date;
     Bundle bd;
-
     String mail;
     int selecttime ,sendday;
     int nowyear,nowmonth,nowday,sendtime;
@@ -92,7 +91,7 @@ public class Ps_fragment extends Fragment {
         wholayout= (LinearLayout)root.findViewById (R.id.whoed);
         wanttosay=(EditText)root.findViewById(R.id.editText5);
         title=(EditText)root.findViewById(R.id.editText4);
-
+        wantname=(EditText)root.findViewById(R.id.wantname);
        // bd=getActivity().getIntent().getExtras();
        // mail=bd.getString("mail");
 
@@ -119,7 +118,7 @@ public class Ps_fragment extends Fragment {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                if(position==0){
-                   System.out.print("nice");
+                   System.out.print("");
 
                }else if(position==1){
                    final Dialog set=new Dialog(getActivity());
@@ -286,6 +285,7 @@ public class Ps_fragment extends Fragment {
                                     mfirebase.child("Member1").child("Ps").child(title.getText().toString()).child("Message").setValue(wanttosay.getText().toString());
                                     mfirebase.child("Member1").child("Ps").child(title.getText().toString()).child("Title").setValue(title.getText().toString());
                                     mfirebase.child("Member1").child("Ps").child(title.getText().toString()).child("Email").setValue(selfinwho.getText().toString());
+                                    mfirebase.child("Member1").child("Ps").child(title.getText().toString()).child("Forwho").setValue(wantname.getText().toString());
 
                                     if(selecttime==0){
                                         sendday=nowday+sendtime;
@@ -321,6 +321,8 @@ public class Ps_fragment extends Fragment {
                                     mfirebase.child("Member1").child("Ps").child(title.getText().toString()).child("Message").setValue(wanttosay.getText().toString());
                                     mfirebase.child("Member1").child("Ps").child(title.getText().toString()).child("Title").setValue(title.getText().toString());
                                     mfirebase.child("Member1").child("Ps").child(title.getText().toString()).child("Phone").setValue(selfinwho.getText().toString());
+                                    mfirebase.child("Member1").child("Ps").child(title.getText().toString()).child("Forwho").setValue(wantname.getText().toString());
+
                                     if(selecttime==0){
                                         sendday=nowday+sendtime;
                                         mfirebase.child("Member1").child("Ps").child(title.getText().toString()).child("Sendtime").setValue(nowyear+"/"+nowmonth+"/"+sendday);
@@ -352,6 +354,8 @@ public class Ps_fragment extends Fragment {
                                     mfirebase.child("Member1").child("Ps").child(title.getText().toString()).child("Message").setValue(wanttosay.getText().toString());
                                     mfirebase.child("Member1").child("Ps").child(title.getText().toString()).child("Title").setValue(title.getText().toString());
                                     mfirebase.child("Member1").child("Ps").child(title.getText().toString()).child("Phone").setValue(friendinwho.getText().toString());
+                                    mfirebase.child("Member1").child("Ps").child(title.getText().toString()).child("Forwho").setValue(wantname.getText().toString());
+
                                     if(selecttime==0){
                                         sendday=nowday+sendtime;
                                         mfirebase.child("Member1").child("Ps").child(title.getText().toString()).child("Sendtime").setValue(nowyear+"/"+nowmonth+"/"+sendday);
@@ -379,6 +383,7 @@ public class Ps_fragment extends Fragment {
                                     mfirebase.child("Member1").child("Ps").child(title.getText().toString()).child("Message").setValue(wanttosay.getText().toString());
                                     mfirebase.child("Member1").child("Ps").child(title.getText().toString()).child("Title").setValue(title.getText().toString());
                                     mfirebase.child("Member1").child("Ps").child(title.getText().toString()).child("Email").setValue(mail);
+                                    mfirebase.child("Member1").child("Ps").child(title.getText().toString()).child("Forwho").setValue(wantname.getText().toString());
 
                                     if(selecttime==0){
                                         sendday=nowday+sendtime;

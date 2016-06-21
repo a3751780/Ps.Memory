@@ -82,7 +82,7 @@ public class Main extends AppCompatActivity implements
 
         // Click listeners
         fromlocal=(Button)findViewById(R.id.fromlocal);
-        findViewById(R.id.button_camera).setOnClickListener(this);
+
         findViewById(R.id.button_sign_in).setOnClickListener(this);
         findViewById(R.id.button_download).setOnClickListener(this);
         fromlocal.setOnClickListener(new View.OnClickListener() {
@@ -300,7 +300,7 @@ public class Main extends AppCompatActivity implements
 
     private void beginDownload() {
         // Get path
-        String path = "photos/" + mFileUri.getLastPathSegment();
+        String path = "photos/primary:DCIM/Camera/" + mFileUri.getLastPathSegment();
 
         // Kick off download service
         Intent intent = new Intent(this, MyDownloadService.class);
@@ -361,9 +361,7 @@ public class Main extends AppCompatActivity implements
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.button_camera:
-                launchCamera();
-                break;
+
             case R.id.button_sign_in:
                 signInAnonymously();
                 break;

@@ -31,6 +31,8 @@ import android.widget.Toast;
 
 
 import com.example.im01.psmemory.FireUpload.Main;
+import com.firebase.client.Firebase;
+import com.firebase.client.FirebaseError;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
@@ -69,6 +71,7 @@ public class Memory_frag extends Fragment {
     private String Dir="/Photos/";
     String methodselect[]={"請選擇要紀念的Ps","Jason","Skyler","Jacky"};
     Context context;
+    Firebase myfire=new Firebase("https://project-6390619862189429975.firebaseio.com/Acount/Member1/Ps/");
     File file;
     String[] Date;
     int selectwho=0;
@@ -96,16 +99,47 @@ public class Memory_frag extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final View root=inflater.inflate(R.layout.activity_memory_frag, container, false);
 
-
         imageView = (ImageView)root.findViewById(R.id.imageView2);
-
         cv=(CalendarView)root.findViewById(R.id.calendarView);
         main=this;
         who=(EditText) root.findViewById(R.id.editText3);
         method=(Spinner)root.findViewById(R.id.spinner);
-        methodlist = new ArrayAdapter<String>(getActivity(),
-                android.R.layout.simple_spinner_item,methodselect);
+
+        methodlist =new ArrayAdapter<String>(getActivity(),
+                android.R.layout.simple_list_item_1,
+                android.R.id.text1);
+
+        myfire.addChildEventListener(new com.firebase.client.ChildEventListener() {
+            @Override
+            public void onChildAdded(com.firebase.client.DataSnapshot dataSnapshot, String s) {
+                methodlist.add(
+                        (String) dataSnapshot.child("Forwho").getValue());
+            }
+
+            @Override
+            public void onChildChanged(com.firebase.client.DataSnapshot dataSnapshot, String s) {
+                methodlist.remove(
+                        (String) dataSnapshot.child("Forwho").getValue());
+            }
+
+            @Override
+            public void onChildRemoved(com.firebase.client.DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(com.firebase.client.DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+
+            }
+        });
+
         method.setAdapter(methodlist);
+
         nowtime=(Button)root.findViewById(R.id.nowtime);
 
         cv.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
@@ -157,59 +191,27 @@ public class Memory_frag extends Fragment {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
-                if(position==0){
-                    Log.e("S","請選擇");
+                for(int i=0;i<=10;i++){
+                    if(position==i){
+                        myRef.child("Member1").child("Ps").child("Ps"+(position+1)).child("Forwho").addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                String forwho=String.valueOf(dataSnapshot.getValue());
+                                who.setText(forwho);
+                            }
+
+                            @Override
+                            public void onCancelled(DatabaseError error) {
+                                // Failed to read value
+
+                            }
+                        });
+                        selectwho=i+1;
+                    }
+
                 }
 
-                else if(position==1){
-                    myRef.child("Member1").child("Ps").child("Ps"+position).child("Forwho").addValueEventListener(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(DataSnapshot dataSnapshot) {
-                            String forwho=String.valueOf(dataSnapshot.getValue());
-                            who.setText(forwho);
-                        }
 
-                        @Override
-                        public void onCancelled(DatabaseError error) {
-                            // Failed to read value
-
-                        }
-                    });
-                    selectwho=1;
-                }
-
-                else if(position==2){
-                    myRef.child("Member1").child("Ps").child("Ps"+position).child("Forwho").addValueEventListener(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(DataSnapshot dataSnapshot) {
-                            String forwho=String.valueOf(dataSnapshot.getValue());
-                            who.setText(forwho);
-                        }
-
-                        @Override
-                        public void onCancelled(DatabaseError error) {
-                            // Failed to read value
-
-                        }
-                    });
-                    selectwho=2;
-                }
-                else if(position==3){
-                    myRef.child("Member1").child("Ps").child("Ps"+position).child("Forwho").addValueEventListener(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(DataSnapshot dataSnapshot) {
-                            String forwho=String.valueOf(dataSnapshot.getValue());
-                            who.setText(forwho);
-                        }
-
-                        @Override
-                        public void onCancelled(DatabaseError error) {
-                            // Failed to read value
-
-                        }
-                    });
-                    selectwho=3;
-                }
 
             }
 
